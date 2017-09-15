@@ -1,8 +1,5 @@
 package TP1;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.AdjustmentEvent;
 import java.util.Observable;
 
 public class VueTemperatureF extends VueTemperature {
@@ -16,27 +13,7 @@ public class VueTemperatureF extends VueTemperature {
     @Override
     public void update(Observable o, Object arg) {
         ModeleTemperature MT = (ModeleTemperature) arg;
-        tempField.setText("" + MT.getTemperatureF() + "°");
+        tempField.setText("" + ((int) (MT.getTemperatureF() * 1000))/1000d + "°");
         scroll.setValue((int) MT.getTemperatureF());
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String BTN_NAME = ((JButton) e.getSource()).getName();
-        setChanged();
-
-        if(BTN_NAME == Constantes.BTN_PLUSF){
-            notifyObservers(Constantes.BTN_PLUSF);
-        }
-        else if(BTN_NAME == Constantes.BTN_MOINSF){
-            notifyObservers(Constantes.BTN_MOINSF);
-        }
-    }
-
-
-    @Override
-    public void adjustmentValueChanged(AdjustmentEvent e) {
-        setChanged();
-        notifyObservers(scroll);
     }
 }

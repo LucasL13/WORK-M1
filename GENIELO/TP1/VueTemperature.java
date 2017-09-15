@@ -13,12 +13,10 @@ import javax.swing.*;
 public class VueTemperature extends Observable implements Observer, ActionListener, AdjustmentListener {
 
     private JFrame window;
-    private JPanel boutons;
+    private JPanel boutons, scrollbar;
 
     protected JButton plus, moins;
     protected JScrollBar scroll;
-
-    private GridLayout BL;
 
     private JLabel tempLabel;
     protected JTextField tempField;
@@ -39,9 +37,9 @@ public class VueTemperature extends Observable implements Observer, ActionListen
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLocationRelativeTo(null);
         window.setPreferredSize(new Dimension(200,200));
-        BL = new GridLayout(0,1);
 
         boutons = new JPanel(new GridLayout(0,2));
+        scrollbar = new JPanel(new GridLayout(0,1));
 
         plus = new JButton("+");
         moins = new JButton("-");
@@ -56,6 +54,7 @@ public class VueTemperature extends Observable implements Observer, ActionListen
         scroll.setValue(0);
         scroll.setName(SCROLL_ID);
         scroll.addAdjustmentListener(this);
+        scrollbar.add(scroll);
 
         boutons.add(plus);
         boutons.add(moins);
@@ -63,17 +62,16 @@ public class VueTemperature extends Observable implements Observer, ActionListen
         tempLabel = new JLabel(title);
 
         tempField = new JTextField(""+tempF);
-        window.setLayout(BL);
+        window.setLayout(new GridLayout(0,1));
 
         window.add(tempLabel);
         window.add(tempField);
         window.add(boutons);
-        window.add(scroll);
+        window.add(scrollbar);
 
         window.pack();
         window.setVisible(true);
 
-        notifyObservers();
     }
 
 
@@ -83,13 +81,19 @@ public class VueTemperature extends Observable implements Observer, ActionListen
     }
 
 
+    @Override
     public void actionPerformed(ActionEvent e) {
-        // A completer dans les classes héritées
+        String BTN_NAME = ((JButton) e.getSource()).getName();
+        setChanged();
+        notifyObservers(BTN_NAME);
     }
 
 
     @Override
     public void adjustmentValueChanged(AdjustmentEvent e) {
-        // A completer dans les classes héritées
+        if(e.getValueIsAdjusting()) {
+            setChanged();
+            notifyObservers(scroll);
+        }
     }
 }

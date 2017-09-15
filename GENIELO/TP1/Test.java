@@ -9,16 +9,16 @@ public class Test {
         VueTemperatureF VTF = new VueTemperatureF();
         VueTemperatureC VTC = new VueTemperatureC();
         ModeleTemperature MT = new ModeleTemperature();
-        ControleurTemperature CT = new ControleurTemperature();
+        ControleurTemperature CT = new ControleurTemperature(MT);
 
         VTF.createWindow();
         VTC.createWindow();
 
-        MT.addObserver(VTF);
-        MT.addObserver(VTC);
-
         VTF.addObserver(CT);
         VTC.addObserver(CT);
+
+        MT.addObserver(VTF);
+        MT.addObserver(VTC);
 
         CT.addObserver(MT);
     }
