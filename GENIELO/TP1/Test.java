@@ -6,16 +6,20 @@ package TP1;
 public class Test {
 
     public static void main(String[] args) {
-        VueTemperature VT = new VueTemperature();
+        VueTemperatureF VTF = new VueTemperatureF();
+        VueTemperatureC VTC = new VueTemperatureC();
         ModeleTemperature MT = new ModeleTemperature();
         ControleurTemperature CT = new ControleurTemperature();
 
-        VT.createWindow();
+        VTF.createWindow();
+        VTC.createWindow();
 
-        MT.addObserver(VT);
-        VT.addObserver(CT);
+        MT.addObserver(VTF);
+        MT.addObserver(VTC);
+
+        VTF.addObserver(CT);
+        VTC.addObserver(CT);
+
         CT.addObserver(MT);
-
-
     }
 }

@@ -3,61 +3,72 @@ package TP1;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.*;
 
 
-
-
-public class VueTemperature extends Observable implements Observer, ActionListener {
+public class VueTemperature extends Observable implements Observer, ActionListener, AdjustmentListener {
 
     private JFrame window;
-    private JPanel boutons1, boutons2;
+    private JPanel boutons;
 
-    private JButton plusF, moinsF, plusC, moinsC;
+    protected JButton plus, moins;
+    protected JScrollBar scroll;
 
     private GridLayout BL;
 
-    private JLabel Farenheit, Celsius;
-    private JTextField FarenheitTemp, CelsiusTemp;
+    private JLabel tempLabel;
+    protected JTextField tempField;
 
-    private double tempF;
+    private double tempF = 0;
 
-    protected void createWindow(){
-        window = new JFrame("Temperature");
+    private String WINDOW_ID;
+    private String BTN_PLUS_ID;
+    private String BTN_MOINS_ID;
+
+    protected void createWindow(String title, String BTN_PLUS_ID, String BTN_MOINS_ID, String SCROLL_ID){
+
+        this.WINDOW_ID = title;
+        this.BTN_PLUS_ID = BTN_PLUS_ID;
+        this.BTN_MOINS_ID = BTN_MOINS_ID;
+
+        window = new JFrame(title);
         window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         window.setLocationRelativeTo(null);
         window.setPreferredSize(new Dimension(200,200));
         BL = new GridLayout(0,1);
 
-        boutons1 = new JPanel(new GridLayout(0,2));
-        boutons2 = new JPanel(new GridLayout(0,2));
+        boutons = new JPanel(new GridLayout(0,2));
 
-        plusF = new JButton("+");
-        moinsF = new JButton("-");
+        plus = new JButton("+");
+        moins = new JButton("-");
 
-        plusF.addActionListener(this);
-        moinsF.addActionListener(this);
+        plus.addActionListener(this);
+        moins.addActionListener(this);
 
-        plusF.setName(Constantes.BTN_PLUSF);
-        moinsF.setName(Constantes.BTN_MOINSF);
+        plus.setName(BTN_PLUS_ID);
+        moins.setName(BTN_MOINS_ID);
 
-        boutons1.add(plusF);
-        boutons1.add(moinsF);
+        scroll = new JScrollBar(JScrollBar.HORIZONTAL);
+        scroll.setValue(0);
+        scroll.setName(SCROLL_ID);
+        scroll.addAdjustmentListener(this);
 
-        Farenheit = new JLabel("Farenheit");
-        Celsius = new JLabel("Celsius");
+        boutons.add(plus);
+        boutons.add(moins);
 
-        FarenheitTemp = new JTextField("");
-//        CelsiusTemp = new JTextField("" + MT.getTemperatureC());
+        tempLabel = new JLabel(title);
 
+        tempField = new JTextField(""+tempF);
         window.setLayout(BL);
 
-        window.add(Farenheit);
-        window.add(FarenheitTemp);
-        window.add(boutons1);
+        window.add(tempLabel);
+        window.add(tempField);
+        window.add(boutons);
+        window.add(scroll);
 
         window.pack();
         window.setVisible(true);
@@ -68,29 +79,17 @@ public class VueTemperature extends Observable implements Observer, ActionListen
 
     @Override
     public void update(Observable o, Object arg) {
-
-        ArrayList<String> temp = (ArrayList<String>) arg;
-        System.out.println("J'ai recu les new temps : " + temp.get(0)+ " : " + temp.get(1));
-
-        tempF = Double.parseDouble(temp.get(1));
-
-        FarenheitTemp.setText("" + tempF + "°");
+        // A completer dans les classes héritées
     }
-
-
 
 
     public void actionPerformed(ActionEvent e) {
-        String BTN_NAME = ((JButton) e.getSource()).getName();
-
-        setChanged();
-
-        if(BTN_NAME == Constantes.BTN_PLUSF){
-            notifyObservers(Constantes.BTN_PLUSF);
-        }
-        else if(BTN_NAME == Constantes.BTN_MOINSF){
-            notifyObservers(Constantes.BTN_MOINSF);
-        }
+        // A completer dans les classes héritées
     }
 
+
+    @Override
+    public void adjustmentValueChanged(AdjustmentEvent e) {
+        // A completer dans les classes héritées
+    }
 }

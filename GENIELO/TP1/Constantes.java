@@ -12,7 +12,9 @@ public class Constantes{
         public static final String BTN_MOINSF = "BTN_MOINSF";
         public static final String BTN_PLUSC  = "BTN_PLUSC";
         public static final String BTN_MOINSC = "BTN_MOINSC";
+        public static final String SCROLL_F   = "SCROLL_F";
+        public static final String SCROLL_C   = "SCROLL_C";
 
-        public static final String TEMP_F = "TEMP_F";
-        public static final String TEMP_C = "TEMP_C";
+        public static final String FARENHEIT = "FARENHEIT";
+        public static final String CELSIUS = "CELSIUS";
 }

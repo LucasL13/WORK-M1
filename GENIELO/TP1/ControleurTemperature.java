@@ -17,7 +17,6 @@ public class ControleurTemperature extends Observable implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        System.out.println("VT Changed : " + arg);
         setChanged();
         notifyObservers(arg);
     }
