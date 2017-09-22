@@ -1,48 +1,67 @@
 // -*- coding: utf-8 -*-
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <openssl/sha.h>
 #include <openssl/md5.h>
 
 
 int detecter_corps(FILE *fichier){
-  char c;
-  char buff[1024];
   int position = 0; 
+  char *line; 
+  size_t len = 0;
+  ssize_t read;
 
- /* while((c = fgetc(fichier)) != EOF){
-    printf("%c", c);
-    if((int) c == 13)
-      if(((c = fgetc(fichier)) != EOF) && (int) c == 10){
-        position++;
-        if(((c = fgetc(fichier)) != EOF) && (int) c == 13){
-          position++;
-          if(((c = fgetc(fichier)) != EOF) && (int) c == 10)
-            return position++;
-        }
-      }
-    
-    position++;
-  }*/
-
-  while(1){
-    fgets(buff, 255, fichier);
-
-    if(buff[0] == 13 && buff[1] == 10)
+  while ((read = getline(&line, &len, fichier)) != -1) {
+    if(read == 2){
+      position += 2;
       break;
-      
-    position += strlen(buff);
+    }
+    position += read;
   }
 
   return position;
 }
 
+int extraire_corps(FILE *fichier, char **corps){
+  int corps_pos = detecter_corps(fichier);
+  int nb_octets_lus = 0;
+  char *buffer = malloc(sizeof(char)*1024);
+
+  fseek(fichier, corps_pos, SEEK_SET);
+
+  char *line;
+  size_t len = 0;
+  ssize_t read;
+
+  while ((read = getline(&line, &len, fichier)) != -1) {
+    if(read != 2)
+      strcpy(buffer+nb_octets_lus, line);
+    nb_octets_lus += read;
+  }
+
+  *corps = malloc(sizeof(char) * strlen(buffer));
+  strcpy(*corps, buffer);
+  free(buffer);
+
+  return nb_octets_lus-2;
+}
+
+void calculer_MD5(unsigned char *resume, char *text, int nb_octets_lus){
+  MD5_CTX contexte;
+  MD5_Init (&contexte);
+  MD5_Update(&contexte, text, nb_octets_lus);
+  
+  MD5_Final (resume, &contexte);
+}
+
+
 int cert(){
     int i;
     unsigned char resume_md5[MD5_DIGEST_LENGTH];
-    //unsigned char buffer[1024];
-    char buffer[255];
-    int nb_octets_lus = 0;
+    int nb_octets_lus;
+    char *corps;
 
     // On ouvre le fichier
     char *nom_du_fichier="../email1.txt";
@@ -52,42 +71,14 @@ int cert(){
       return 0;
     }
 
-    MD5_CTX contexte;
-    MD5_Init (&contexte);
+    nb_octets_lus = extraire_corps(fichier, &corps);
+    printf("Corps(%d) = %s\n", nb_octets_lus, corps);
 
-    int corps_pos = detecter_corps(fichier);
-    printf("\n\n Pos = %d", corps_pos);
+    calculer_MD5(resume_md5, corps, nb_octets_lus);
 
-    fseek(fichier, corps_pos, SEEK_SET);
-
-    while(fgets(buffer, 255, fichier) != NULL){
-      printf("%s", buffer);
-        nb_octets_lus += strlen(buffer);
-    }
-
-    printf("\nBuffer(%d) : \n\n %s \n",nb_octets_lus, buffer);
-
-    MD5_Update(&contexte, buffer, nb_octets_lus-4);
-
-    MD5_Final (resume_md5, &contexte);
     printf("Le résumé MD5 du corps du fichier email1.txt vaut: 0x");
     for(i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", resume_md5[i]);
     printf("\n"); 
-
-    // printf("\n\n\n Buffer : \n\n %s \n", buffer);
-   /* MD5_CTX contexte;
-    MD5_Init (&contexte); // Initialisation de la fonction de hachage
-    nb_octets_lus = fread (buffer, 1, 1, fichier);   // Lecture du premier morceau
-    while (nb_octets_lus != 0) {
-      printf("-- %s \n\n", buffer);
-      MD5_Update (&contexte, buffer, nb_octets_lus);                    // Digestion du morceau
-      nb_octets_lus = fread (buffer+100, 1, 1, fichier); // Lecture du morceau suivant
-    }
-    fclose (fichier);
-    MD5_Final (resume_md5, &contexte);
-    printf("Le résumé MD5 du fichier \"butokuden.jpg\" vaut: 0x");
-    for(i = 0; i < MD5_DIGEST_LENGTH; i++) printf("%02x", resume_md5[i]);
-    printf("\n"); */
     
     return 0;
 }
@@ -97,11 +88,3 @@ int main()
   cert();
   return 0;
 }
-
-/*
-> make
-> ./resumes
-Le résumé MD5 du fichier "butokuden.jpg" vaut: 0xaeef572459c1bec5f94b8d62d5d134b5
-> cat butokuden.jpg | md5
-aeef572459c1bec5f94b8d62d5d134b5
-*/
