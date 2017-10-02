@@ -10,8 +10,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Graphe g = new Graphe("Graphe.txt");
-        Dijkstra djk = new Dijkstra();
+        Graphe g = new Graphe("Graphe2.txt");
+        Dijkstra2 djk = new Dijkstra2();
 
         g.affiche_graphe();
 

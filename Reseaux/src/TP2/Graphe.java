@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Graphe {
 
@@ -17,11 +18,14 @@ public class Graphe {
     public Graphe(String pathname){
 
         try{
+
+            File f = new File(pathname);
+            Scanner sc = new Scanner(f);
             FileInputStream fis = new FileInputStream(pathname);
-            this.ns = Character.getNumericValue(fis.read());
+
+            this.ns = sc.nextInt();
             System.out.println("Nombre de sommets : " + this.ns);
-            fis.read();
-            this.na = Character.getNumericValue(fis.read());
+            this.na = sc.nextInt();
             System.out.println("Nombre d'arcs : " + this.na);
 
             this.m = new int[this.ns][this.ns];
@@ -31,16 +35,14 @@ public class Graphe {
                     m[i][j] = 0;
 
             int c, sFrom, sTo, sWeight;
-            while( (c = fis.read()) != -1){
-                sFrom = Character.getNumericValue(fis.read());
-                fis.read();
-                sTo = Character.getNumericValue(fis.read());
-                fis.read();
-                sWeight = Character.getNumericValue(fis.read());
+            for(int nba = 0; nba < this.na; nba++){
+                sFrom = sc.nextInt();
+                sTo = sc.nextInt();
+                sWeight = sc.nextInt();
                 System.out.println("Arc : " + sFrom + "->" + sTo + " = " + sWeight);
 
                 this.m[sFrom][sTo] = sWeight;
-                this.m[sTo][sFrom] = sWeight;
+                //this.m[sTo][sFrom] = sWeight;
             }
 
            System.out.println("\nFin création du graphe");
