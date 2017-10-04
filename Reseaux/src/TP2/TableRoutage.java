@@ -17,6 +17,7 @@ public class TableRoutage {
     int [][] tableRoutage;
 
 
+    // Constructeur et initialisateur d'une table de routage (pour un sommet "Sommet")
     public TableRoutage(int Sommet, int taille_table){
         this.sommet = Sommet;
         this.tableRoutage = new int[3][taille_table];
@@ -26,6 +27,7 @@ public class TableRoutage {
 
     public void afficher_table_routage(){
         System.out.println("\nAfficher table de routage du sommet \"" + sommet + "\"\n");
+        System.out.println("\nSommet à atteindre | Sommet prédécésseur | Cout total\n");
 
         for(int i=0; i < taille_table; i++){
             for(int j=0; j < 3; j++){

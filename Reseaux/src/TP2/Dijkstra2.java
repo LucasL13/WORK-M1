@@ -19,6 +19,11 @@ public class Dijkstra2 {
     Graphe g;
 
     TableRoutage calculer_table(Graphe g, int sommet){
+
+        System.out.println("\n-------------------------------------------------");
+        System.out.print("Calcul table de routage de " + sommet);
+        System.out.println("\n-------------------------------------------------");
+
         TableRoutage tr = new TableRoutage(sommet, g.ns);
 
         this.g = g;
@@ -33,8 +38,8 @@ public class Dijkstra2 {
         pi[sommet] = sommet;
 
         decouvrir_adjacence(sommet);
-        System.out.println("F = " + F.toString());
-        System.out.println("E= " + E.toString());
+//        System.out.println("F = " + F.toString());
+//        System.out.println("E= " + E.toString());
 
         while (!F.isEmpty()) {
 
@@ -43,8 +48,8 @@ public class Dijkstra2 {
 
             decouvrir_adjacence(nextLowStep);
 
-            System.out.println("F = " + F.toString());
-            System.out.println("E= " + E.toString());
+//            System.out.println("F = " + F.toString());
+//            System.out.println("E= " + E.toString());
 
 
         }
@@ -137,12 +142,5 @@ public class Dijkstra2 {
 
     }
 
-
-    private void relacher(int u, int v, int w){
-        if(d[v] > (d[u] + w)){
-            d[v] = d[u] + w;
-            pi[v] = u;
-        }
-    }
 
 }

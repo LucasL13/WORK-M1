@@ -10,14 +10,28 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Graphe g = new Graphe("Graphe2.txt");
-        Dijkstra2 djk = new Dijkstra2();
+        // Création et lecture du graphe
+        Graphe g = new Graphe("Graphe.txt");
 
-        g.affiche_graphe();
+        // Création d'une instance de la classe qui possede les fonctions de calcul
+        Dijkstra2 djk;
 
-        TableRoutage trS0 = djk.calculer_table(g, 0);
-        trS0.afficher_table_routage();
+        // Vérification de la bonne lecture et du bon chargement du graphe
+        // g.affiche_graphe();
 
+        // Création des tables de routages pour tous les sommets
+        listeTablesRoutage = new ArrayList<TableRoutage>();
+        for(int i=0; i < g.ns; i++) {
+            djk = new Dijkstra2();
+            listeTablesRoutage.add(djk.calculer_table(g, i));
+            listeTablesRoutage.get(i).afficher_table_routage();
+        }
+
+        // Affichage de la table de routage du sommet 0 pour vérification
+//        listeTablesRoutage.get(1).afficher_table_routage();
+
+
+        GUI_Vue GUI_V = new GUI_Vue(g);
     }
 
 
