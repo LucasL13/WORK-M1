@@ -34,8 +34,7 @@ public class Dijkstra2 {
         F = new TreeSet<>();
 
         F.add(sommet);
-        d[sommet] = sommet;
-        pi[sommet] = sommet;
+        d[sommet] = 0;
 
         decouvrir_adjacence(sommet);
 //        System.out.println("F = " + F.toString());
@@ -55,11 +54,16 @@ public class Dijkstra2 {
         }
 
         for(int i=0; i < g.ns; i++){
-            if(i != sommet){
+
                 tr.tableRoutage[0][i] = i;
                 tr.tableRoutage[1][i] = pi[i];
                 tr.tableRoutage[2][i] = d[i];
-            }
+
+                if(tr.tableRoutage[2][i] == Integer.MAX_VALUE-1){
+                    tr.tableRoutage[2][i] = -1;
+                    tr.tableRoutage[1][i] = -1;
+                }
+
         }
 
         for(int i=0; i < g.ns; i++)
@@ -132,14 +136,12 @@ public class Dijkstra2 {
 
         //System.out.println("D[i] et P[i]");
         for(int i = 0; i < g.ns; i++){
-            d[i] = Integer.MAX_VALUE;
+            d[i] = Integer.MAX_VALUE-1;
             pi[i] = i;
 
             System.out.println(d[i] + " | " + pi[i]);
         }
-
         d[tr.sommet] = 0;
-
     }
 
 

@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Création et lecture du graphe
-        Graphe g = new Graphe("Graphe.txt");
+        Graphe g = new Graphe("Graphe2.txt");
 
         // Création d'une instance de la classe qui possede les fonctions de calcul
         Dijkstra2 djk;

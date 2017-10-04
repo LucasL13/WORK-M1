@@ -15,6 +15,7 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
     private JPanel panel;
     // Liste contenant les élements représentant graphiquement les routeurs ( [0 .. g.ns-1] )
     private ArrayList<JLabel> routers;
+    private ArrayList<Point> lastRoutersPosition;
 
     private Graphe g;
 
@@ -37,6 +38,7 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         this.panel.addMouseMotionListener(this);
 
         this.routers = new ArrayList<JLabel>();
+        this.lastRoutersPosition = new ArrayList<Point>();
 
         try {
             Image img = ImageIO.read(new File("router.png"));
@@ -61,13 +63,21 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         this.frame.add(panel);
         this.frame.setVisible(true);
 
+        for(int i=0; i < g.ns; i++)
+            lastRoutersPosition.add(new Point(routers.get(i).getX(), routers.get(i).getY()));
+
+        btn_msg_selected = new int[2];
     }
 
 
     // Methode de dessin de la fenetre, redéfinie afin de dessiner les arcs
     @Override
     protected void paintComponent(Graphics gc) {
+
         super.paintComponent(gc);
+
+        for(int i=0; i < g.ns; i++)
+            routers.get(i).setLocation(lastRoutersPosition.get(i));
 
         Graphics2D g2 = (Graphics2D) gc;
         g2.setStroke(new BasicStroke(5));
@@ -80,7 +90,6 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
             for(int j=0; j < g.ns; j++){
                 if(j != i && g.m[i][j] != 0){
 
-                    g2.setStroke(new BasicStroke(5));
                     int x1 = routers.get(i).getX() + routers.get(i).getWidth()/2;
                     int y1 = routers.get(i).getY() + routers.get(i).getHeight()/2;
                     int x2 = routers.get(j).getX() + routers.get(j).getWidth()/2;
@@ -89,12 +98,6 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
                     g2.drawString(g.m[i][j]+"", (x1+x2)/2+15, (y1+y2)/2+30);
                     g2.drawLine(x1, y1, x2, y2);
                     g2.drawLine( (x1+x2)/2, (y1+y2)/2, x2, y2);
-
-                    g2.setStroke(new BasicStroke(10));
-                    int x3 = ((4*x2)/5 + x1/5)/2;
-                    int y3 = ((4*y2)/5 + y1/5)/2;
-                    g2.drawLine(x3, y3, x2, y2);
-
 
                 }
             }
@@ -108,13 +111,15 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
     @Override
     public void mouseClicked(MouseEvent e) {
 
+        int btn_id = Integer.parseInt(((JLabel) e.getComponent()).getName());
+
         if(e.getButton() == MouseEvent.BUTTON1){
             // En cas de clic gauche sur un routeur :
             // On le sélectionne pour déplacement
             // Il suit la position de la souris jusqu'au prochain clic gauche
 
             if(this.btn_move_selected == -1) {
-                btn_move_selected = Integer.parseInt(((JLabel) e.getComponent()).getName());
+                btn_move_selected = btn_id;
                 //routers.get(btn_move_selected).setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
             }
             else {
@@ -127,6 +132,23 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
             // Premier clic droit : on l'ajoute comme source pour un envoi de paquet
             // Second clic droit : on l'ajoute comme destination et on envoi le paquet
             // On reset le tableau btn_msg_selected[source, destination]
+
+            if(btn_msg_selected[0] == btn_id) {
+                routers.get(btn_id).setBorder(BorderFactory.createEmptyBorder());
+                btn_msg_selected[0] = -1;
+            }
+            else if(btn_msg_selected[1] == btn_id){
+                routers.get(btn_id).setBorder(BorderFactory.createEmptyBorder());
+                btn_msg_selected[1] = -1;
+            }
+            else{
+                routers.get(btn_id).setBorder(BorderFactory.createLineBorder(Color.green, 5));
+                if(btn_msg_selected[0] == -1)
+                    btn_msg_selected[0] = btn_id;
+                else
+                    btn_msg_selected[1] = btn_id;
+            }
+
         }
 
 
@@ -149,6 +171,8 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         // On le met à jour en fonction des mouvements de la souris et on redessine
         if(this.btn_move_selected == -1) return;
         routers.get(this.btn_move_selected).setLocation(e.getX(), e.getY());
+        lastRoutersPosition.get(this.btn_move_selected).x = e.getX();
+        lastRoutersPosition.get(this.btn_move_selected).y = e.getY();
         paint(this.getGraphics());
     }
 }
