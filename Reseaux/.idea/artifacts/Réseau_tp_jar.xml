@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Réseau_tp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Réseau_tp_jar</output-path>
+    <root id="archive" name="Réseau_tp.jar">
+      <element id="module-output" name="Réseau_tp" />
+    </root>
+  </artifact>
+</component>

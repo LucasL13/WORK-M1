@@ -1,0 +1,26 @@
+Rendu TP2 - Réseau : LOIGNON Lucas et CAUET Christopher
+
+Contenu de l'archive : 
+
+Exemple_topologie_test.png : 
+Un exemple d'agencement des sommets (routeurs) pour le graphe fourni avec la demo
+
+
+/Demo[JAR] : 
+Contient un programme éxécutable de notre simulateur à des fins de test.
+
+-> Lancer le script /Demo[JAR]/SimulateurReseau.sh
+
+OU
+
+-> Se déplacer dans le dossier /Demo[JAR]/sources/ et éxécuter la commande 
+	"java -Dsun.java2d.opengl=true -jar Réseau_tp.jar" 
+
+
+/Code : Contient toutes les classes commentées de ce TP
+
+/!\ : Les classes sont liées par un package "TP2" il est donc important de les garder dans le même dossier
+
+/!\ : L'option de compilation "-Dsun.java2d.opengl=true" est vitale sous Linux et permet de garantir une fluidité correcte à l'animation
+
+
