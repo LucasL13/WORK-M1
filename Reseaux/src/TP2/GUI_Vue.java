@@ -14,15 +14,14 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
     private JFrame frame;
     private JPanel panel;
     // Liste contenant les élements représentant graphiquement les routeurs ( [0 .. g.ns-1] )
-    private ArrayList<JLabel> routers;
-    private ArrayList<Point> lastRoutersPosition;
+    private ArrayList<RouterVue> routers;
 
     private Graphe g;
 
     // Indicateur du routeur selectionné pour déplacement
     private int btn_move_selected = -1;
     // Indicateur des deux routeurs selectionnés pour transmettre un paquet ([0] = source, [1] destination))
-    private int[] btn_msg_selected;
+    private ArrayList<Integer> routers_paquet;
 
 
     // Constructeur et initialisateur de l'interface graphique
@@ -37,36 +36,23 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         this.panel = this;
         this.panel.addMouseMotionListener(this);
 
-        this.routers = new ArrayList<JLabel>();
-        this.lastRoutersPosition = new ArrayList<Point>();
+        this.routers = new ArrayList<RouterVue>();
 
         try {
-            Image img = ImageIO.read(new File("router.png"));
-            img = img.getScaledInstance(100,100,0);
-            ImageIcon img_ico = new ImageIcon(img);
             for (int i = 0; i < g.ns; i++) {
-                routers.add(new JLabel());
-                routers.get(i).setIcon(new ImageIcon(img));
-                routers.get(i).setSize(50,50);
-                routers.get(i).setPreferredSize(new Dimension(100,100));
-                routers.get(i).setText("R1");
+                routers.add(new RouterVue(i));
                 routers.get(i).addMouseListener(this);
-                routers.get(i).setName(i+"");
-                routers.get(i).setText(i+"");
-                routers.get(i).setHorizontalTextPosition(JLabel.CENTER);
-                routers.get(i).setFont(new Font(routers.get(i).getFont().getName(), Font.PLAIN, 20));
                 this.panel.add(routers.get(i));
             }
-
         }catch(Exception e){ e.printStackTrace(); }
 
         this.frame.add(panel);
         this.frame.setVisible(true);
 
         for(int i=0; i < g.ns; i++)
-            lastRoutersPosition.add(new Point(routers.get(i).getX(), routers.get(i).getY()));
+            routers.get(i).setLastPosition( routers.get(i).getX(), routers.get(i).getY());
 
-        btn_msg_selected = new int[2];
+        routers_paquet = new ArrayList<Integer>();
     }
 
 
@@ -77,7 +63,7 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         super.paintComponent(gc);
 
         for(int i=0; i < g.ns; i++)
-            routers.get(i).setLocation(lastRoutersPosition.get(i));
+            routers.get(i).setLocation(routers.get(i).getLastPosition());
 
         Graphics2D g2 = (Graphics2D) gc;
         g2.setStroke(new BasicStroke(5));
@@ -120,10 +106,12 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
 
             if(this.btn_move_selected == -1) {
                 btn_move_selected = btn_id;
+                routers.get(btn_move_selected).change_state(Constantes.ROUTER_STATE_MOVING);
                 //routers.get(btn_move_selected).setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
             }
             else {
                 //routers.get(btn_move_selected).setBorder(BorderFactory.createEmptyBorder());
+                routers.get(btn_move_selected).change_state(Constantes.ROUTER_STATE_DEFAULT);
                 this.btn_move_selected = -1;
             }
         }
@@ -133,20 +121,23 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
             // Second clic droit : on l'ajoute comme destination et on envoi le paquet
             // On reset le tableau btn_msg_selected[source, destination]
 
-            if(btn_msg_selected[0] == btn_id) {
-                routers.get(btn_id).setBorder(BorderFactory.createEmptyBorder());
-                btn_msg_selected[0] = -1;
+            if(routers_paquet.size() == 2){
+                routers.get(routers_paquet.get(0)).change_state(Constantes.ROUTER_STATE_DEFAULT);
+                routers.get(routers_paquet.get(1)).change_state(Constantes.ROUTER_STATE_DEFAULT);
+                routers_paquet = new ArrayList<Integer>();
             }
-            else if(btn_msg_selected[1] == btn_id){
-                routers.get(btn_id).setBorder(BorderFactory.createEmptyBorder());
-                btn_msg_selected[1] = -1;
+
+            if(routers.get(btn_id).getState() == Constantes.ROUTER_STATE_PACKET) {
+                routers.get(btn_id).change_state(Constantes.ROUTER_STATE_DEFAULT);
+                routers_paquet.remove(routers_paquet.indexOf(btn_id));
             }
-            else{
-                routers.get(btn_id).setBorder(BorderFactory.createLineBorder(Color.green, 5));
-                if(btn_msg_selected[0] == -1)
-                    btn_msg_selected[0] = btn_id;
-                else
-                    btn_msg_selected[1] = btn_id;
+            else if(routers.get(btn_id).getState() == Constantes.ROUTER_STATE_DEFAULT){
+                routers.get(btn_id).change_state(Constantes.ROUTER_STATE_PACKET);
+                routers_paquet.add(btn_id);
+                if(routers_paquet.size() == 2){
+                    System.out.println("JE DOIS ENVOYER UN PAQUET ENTRE r" + routers_paquet.get(0) + " et r" + routers_paquet.get(1));
+
+                }
             }
 
         }
@@ -170,9 +161,7 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         // Si un bouton est selectionné pour déplacement
         // On le met à jour en fonction des mouvements de la souris et on redessine
         if(this.btn_move_selected == -1) return;
-        routers.get(this.btn_move_selected).setLocation(e.getX(), e.getY());
-        lastRoutersPosition.get(this.btn_move_selected).x = e.getX();
-        lastRoutersPosition.get(this.btn_move_selected).y = e.getY();
+        routers.get(this.btn_move_selected).setLastPosition(e.getX(), e.getY());
         paint(this.getGraphics());
     }
 }
