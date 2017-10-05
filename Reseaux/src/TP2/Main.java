@@ -11,10 +11,10 @@ public class Main {
     public static void main(String[] args) {
 
         // Création et lecture du graphe
-        Graphe g = new Graphe("Graphe2.txt");
+        Graphe g = new Graphe("Graphe.txt");
 
         // Création d'une instance de la classe qui possede les fonctions de calcul
-        Dijkstra2 djk;
+        Dijkstra djk;
 
         // Vérification de la bonne lecture et du bon chargement du graphe
         // g.affiche_graphe();
@@ -22,7 +22,7 @@ public class Main {
         // Création des tables de routages pour tous les sommets
         listeTablesRoutage = new ArrayList<TableRoutage>();
         for(int i=0; i < g.ns; i++) {
-            djk = new Dijkstra2();
+            djk = new Dijkstra();
             listeTablesRoutage.add(djk.calculer_table(g, i));
             listeTablesRoutage.get(i).afficher_table_routage();
         }
@@ -31,7 +31,7 @@ public class Main {
 //        listeTablesRoutage.get(1).afficher_table_routage();
 
 
-        GUI_Vue GUI_V = new GUI_Vue(g);
+        GUI_Vue GUI_V = new GUI_Vue(g, listeTablesRoutage);
     }
 
 

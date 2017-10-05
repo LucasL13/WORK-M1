@@ -42,7 +42,7 @@ public class Graphe {
                 System.out.println("Arc : " + sFrom + "->" + sTo + " = " + sWeight);
 
                 this.m[sFrom][sTo] = sWeight;
-                //this.m[sTo][sFrom] = sWeight;
+                this.m[sTo][sFrom] = sWeight;
             }
 
            System.out.println("\nFin création du graphe");

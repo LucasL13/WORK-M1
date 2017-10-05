@@ -17,21 +17,24 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
     private ArrayList<RouterVue> routers;
 
     private Graphe g;
+    private ArrayList<TableRoutage> tr;
 
     // Indicateur du routeur selectionné pour déplacement
     private int btn_move_selected = -1;
     // Indicateur des deux routeurs selectionnés pour transmettre un paquet ([0] = source, [1] destination))
     private ArrayList<Integer> routers_paquet;
 
+    private ArrayList<Integer> routers_paquet_chemin;
 
     // Constructeur et initialisateur de l'interface graphique
-    public GUI_Vue(Graphe g){
+    public GUI_Vue(Graphe g, ArrayList<TableRoutage> tr){
         this.frame = new JFrame("Simulateur Réseaux");
         this.frame.setSize(1000,1000);
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setLocationRelativeTo(null);
 
         this.g = g;
+        this.tr = tr;
 
         this.panel = this;
         this.panel.addMouseMotionListener(this);
@@ -53,6 +56,7 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
             routers.get(i).setLastPosition( routers.get(i).getX(), routers.get(i).getY());
 
         routers_paquet = new ArrayList<Integer>();
+        routers_paquet_chemin = new ArrayList<Integer>();
     }
 
 
@@ -69,12 +73,26 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         g2.setStroke(new BasicStroke(5));
         g2.setFont(new Font(g2.getFont().getName(), Font.PLAIN, 20));
 
-        g2.setColor(Color.DARK_GRAY);
 
         // On trace les arcs entre les routeurs qui en possedent
         for(int i=0; i < g.ns; i++){
             for(int j=0; j < g.ns; j++){
                 if(j != i && g.m[i][j] != 0){
+
+                    if(routers_paquet_chemin.size() != 0 && routers_paquet_chemin.contains(i)
+                            && (routers_paquet_chemin.indexOf(i) < routers_paquet_chemin.size()-1)
+                            && routers_paquet_chemin.get(routers_paquet_chemin.indexOf(i)+1) == j) {
+                        g2.setColor(Color.GREEN);
+                        System.out.println("TROUVé i =" + i + " j = " + j);
+                    }
+                    else if(routers_paquet_chemin.size() != 0 && routers_paquet_chemin.contains(j)
+                            && (routers_paquet_chemin.indexOf(j) < routers_paquet_chemin.size()-1)
+                            && routers_paquet_chemin.get(routers_paquet_chemin.indexOf(j)+1) == i) {
+                        g2.setColor(Color.GREEN);
+                        System.out.println("TROUVé i =" + i + " j = " + j);
+                    }
+                    else
+                        g2.setColor(Color.DARK_GRAY);
 
                     int x1 = routers.get(i).getX() + routers.get(i).getWidth()/2;
                     int y1 = routers.get(i).getY() + routers.get(i).getHeight()/2;
@@ -83,7 +101,6 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
 
                     g2.drawString(g.m[i][j]+"", (x1+x2)/2+15, (y1+y2)/2+30);
                     g2.drawLine(x1, y1, x2, y2);
-                    g2.drawLine( (x1+x2)/2, (y1+y2)/2, x2, y2);
 
                 }
             }
@@ -117,9 +134,11 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
         }
         else if(e.getButton() == MouseEvent.BUTTON3){
             // En cas de clic droit sur un routeur :
-            // Premier clic droit : on l'ajoute comme source pour un envoi de paquet
-            // Second clic droit : on l'ajoute comme destination et on envoi le paquet
-            // On reset le tableau btn_msg_selected[source, destination]
+            // Si le routeur n'est pas dans la liste des deux routeurs qui souhaitent communiquer, on l'ajouter
+            // Si le routeur est déja dans la liste des deux routeurs qui souhaitent communiquer, on le retire
+            // Si la liste contient deux routeurs, on charge la fonction chargée de "commuter"
+
+            routers_paquet_chemin = new ArrayList<Integer>();
 
             if(routers_paquet.size() == 2){
                 routers.get(routers_paquet.get(0)).change_state(Constantes.ROUTER_STATE_DEFAULT);
@@ -136,13 +155,54 @@ public class GUI_Vue extends JPanel implements ActionListener, MouseListener, Mo
                 routers_paquet.add(btn_id);
                 if(routers_paquet.size() == 2){
                     System.out.println("JE DOIS ENVOYER UN PAQUET ENTRE r" + routers_paquet.get(0) + " et r" + routers_paquet.get(1));
-
+                    calculer_chemin();
                 }
             }
 
         }
+        repaint();
+    }
 
+    private void calculer_chemin(){
+//        int tmp = -1;
+//
+//        int source = routers_paquet.get(0);
+//        routers_paquet_chemin.add(source);
+//        while(tr.get(source).tableRoutage[1][routers_paquet.get(1)] != routers_paquet.get(1)){
+//            tmp = tr.get(source).tableRoutage[1][routers_paquet.get(1)];
+//            routers_paquet_chemin.add(tmp);
+//            source = tmp;
+//        }
+//        routers_paquet_chemin.add(routers_paquet.get(1));
+//        System.out.println("Chemin a parcourir de " + routers_paquet.get(0) + " à " + routers_paquet.get(1));
+//        System.out.println(routers_paquet_chemin);
 
+        routers_paquet_chemin = new ArrayList<Integer>();
+
+        int tmp;
+        int fini = 0;
+
+        int source = routers_paquet.get(0);
+        int destination = routers_paquet.get(1);
+
+        routers_paquet_chemin.add(destination);
+
+        while(fini == 0){
+            int predecesseur = tr.get(source).tableRoutage[1][destination];
+
+            if(predecesseur == source){
+                fini = 1;
+            }
+            else{
+                destination = predecesseur;
+                routers_paquet_chemin.add(predecesseur);
+            }
+        }
+
+        routers_paquet_chemin.add(source);
+
+        System.out.println("Chemin a parcourir de " + routers_paquet.get(0) + " à " + routers_paquet.get(1));
+        System.out.println(routers_paquet_chemin);
     }
 
     @Override

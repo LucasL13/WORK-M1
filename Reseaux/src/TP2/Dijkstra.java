@@ -1,50 +1,110 @@
 package TP2;
 
-import javafx.scene.control.Tab;
-
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * Created by work on 28/09/17.
- */
 public class Dijkstra {
 
     int[] d;
     int[] pi;
 
+    Set<Integer> E;
+    Set<Integer> F;
+
+    Graphe g;
+
     TableRoutage calculer_table(Graphe g, int sommet){
+
+        System.out.println("\n-------------------------------------------------");
+        System.out.print("Calcul table de routage de " + sommet);
+        System.out.println("\n-------------------------------------------------");
+
         TableRoutage tr = new TableRoutage(sommet, g.ns);
+
+        this.g = g;
 
         init(g, tr);
 
-        Set<Integer> E = new TreeSet<>();
-        Set<Integer> F = new TreeSet<>();
+        E = new TreeSet<>();
+        F = new TreeSet<>();
 
-        for(int i=0; i < g.ns; i++){
-            F.add(i);
+        F.add(sommet);
+        d[sommet] = 0;
+
+        decouvrir_adjacence(sommet);
+//        System.out.println("F = " + F.toString());
+//        System.out.println("E= " + E.toString());
+
+        while (!F.isEmpty()) {
+
+            int nextLowStep = chercher_min();
+            //System.out.println("Sommet a plus petite valeur : " + nextLowStep);
+
+            decouvrir_adjacence(nextLowStep);
+
+//            System.out.println("F = " + F.toString());
+//            System.out.println("E= " + E.toString());
+
+
         }
 
-        while(!F.isEmpty()){
-            int u = extraire_min(F);
-            E.add(u);
-            F.remove(u);
-            for(int i=0; i < g.ns; i++){
-                if(g.m[u][i] != 0){
-                    relacher(u, i, g.m[u][i]);
-                }
-            }
-        }
-
         for(int i=0; i < g.ns; i++){
-            if(i != sommet){
+
                 tr.tableRoutage[0][i] = i;
                 tr.tableRoutage[1][i] = pi[i];
                 tr.tableRoutage[2][i] = d[i];
-            }
+
+                if(tr.tableRoutage[2][i] == Integer.MAX_VALUE-1){
+                    tr.tableRoutage[2][i] = -1;
+                    tr.tableRoutage[1][i] = -1;
+                }
+
         }
 
+        for(int i=0; i < g.ns; i++)
+            System.out.print(i + " | ");
+
+        System.out.println();
+
+        for(int i=0; i < g.ns; i++)
+            System.out.print(d[i] + " | ");
+
+        System.out.println();
+
+        for(int i=0; i < g.ns; i++)
+            System.out.print(pi[i] + " | ");
+
         return tr;
+    }
+
+    private int chercher_min(){
+        int min = Integer.MAX_VALUE;
+        int s_min = 0;
+        for(int s : F){
+           // System.out.println("d["+s+"] = " + d[s] + " | min = " + min);
+            if(d[s] < min){
+                min = d[s];
+                s_min = s;
+            }
+        }
+        return s_min;
+    }
+
+    private void decouvrir_adjacence(int s){
+        F.remove(s);
+        E.add(s);
+        for(int i=0; i < g.ns; i++){
+            //System.out.println("g.m["+s+"]["+i+"] = " + g.m[s][i]);
+            if(!E.contains(i) && g.m[s][i] != 0){
+                F.add(i);
+                //System.out.println("F contient : " + F.size() + " élements");
+                //System.out.println("d["+d[pi[i]]+"]");
+                if(g.m[s][i] + d[s] < d[i]){
+                    d[i] = g.m[s][i] + d[s];
+                    pi[i] = s;
+                }
+            }
+        }
     }
 
 
@@ -69,20 +129,15 @@ public class Dijkstra {
         d = new int[g.ns];
         pi = new int[g.ns];
 
-        for(int i = 0; i < g.ns-1; i++){
-            d[i] = Integer.MAX_VALUE;
-            pi[i] = -1;
-        }
+        //System.out.println("D[i] et P[i]");
+        for(int i = 0; i < g.ns; i++){
+            d[i] = Integer.MAX_VALUE-1;
+            pi[i] = i;
 
+            System.out.println(d[i] + " | " + pi[i]);
+        }
         d[tr.sommet] = 0;
     }
 
-
-    private void relacher(int u, int v, int w){
-        if(d[v] > (d[u] + w)){
-            d[v] = d[u] + w;
-            pi[v] = u;
-        }
-    }
 
 }

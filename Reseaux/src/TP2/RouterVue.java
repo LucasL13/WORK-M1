@@ -5,11 +5,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
-/**
- * Created by work on 05/10/17.
- */
+
 public class RouterVue extends JLabel {
 
+
+    // Classe héritant d'un JLabel
+    // Représente un routeur en version graphique sur la GUI
 
     private int RouterNumber;
     private int state;

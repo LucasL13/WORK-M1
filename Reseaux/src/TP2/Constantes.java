@@ -13,7 +13,6 @@ public class Constantes {
     public static final String IMG_MOVE_PATHNAME = "router_move.png";
     public static final String IMG_PACKET_PATHNAME = "router_msg.png";
 
-
     public static final int ROUTER_IMG_SIZE = 100;
 
 }
