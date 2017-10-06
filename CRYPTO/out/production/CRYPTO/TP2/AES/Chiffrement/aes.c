@@ -24,7 +24,7 @@ uchar gmul(uchar a, uchar b) {
       a ^= 0x1b;		
     b >>= 1;
   }
-  return p;
+  return p & 00xFF;
 }
 
 uchar SBox[256] = {

@@ -25,15 +25,16 @@ public class Diversification {
     static int[] Rcon = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36 };
 
     //static int[][] K = {{0x00, 0x00, 0x00, 0x00}, {0x0, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x00}, {0x00, 0x00, 0x00, 0x00}};
-    static int[][] K = {{0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}};
-    static int[][] W;
+    //static int[][] K = {{0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}};
+    public int[][] W;
+    public int[][] K;
 
 
     static int Nr;
     static int Nk;
 
 
-    static void affiche_la_clef(){
+    public void affiche_la_clef(){
         int x = 0;
         for (int i=0; i < W.length; i++){
             for(int j=0; j < W[i].length; j++) {
@@ -46,7 +47,7 @@ public class Diversification {
 
     }
 
-    static int[] RotWord(int[] tmp){
+    public int[] RotWord(int[] tmp){
         int[] ttmp = new int[tmp.length];
         for(int i=0; i < tmp.length; i++) {
             ttmp[i] = tmp[((i + 1) % tmp.length)];
@@ -54,14 +55,29 @@ public class Diversification {
         return ttmp;
     }
 
-    static int[] SubWord(int[] tmp){
+    public int[] SubWord(int[] tmp){
         int[] ttmp = new int[tmp.length];
         for(int i=0; i < tmp.length; i++)
             ttmp[i] = SBox[tmp[i]];
         return ttmp;
     }
 
-    static void calcule_la_clef_etendue(){
+    public void calcule_la_clef_etendue(){
+
+        switch ((K.length*4)){
+            case 16: Nr = 10; Nk = 4; break;
+            case 24: Nr = 12; Nk = 6; break;
+            case 32: Nr = 14; Nk = 8; break;
+            default:
+                System.out.println("Erreur taille de la clée courte invalide\n");
+        }
+
+        W = new int[(4 * (Nr+1))][4];
+
+        System.out.println("K = " + K.length *4 );
+        System.out.println("Nr = " +Nr);
+        System.out.println("Nk = " + Nk);
+        System.out.println();
 
         // Copie de W dans K
         for(int i=0; i < Nk; i++)
@@ -98,32 +114,5 @@ public class Diversification {
                 W[i][j] = tmp[j];
         }
     }
-
-
-
-    public static void main(String[] args) {
-
-        switch ((K.length*4)){
-            case 16: Nr = 10; Nk = 4; break;
-            case 24: Nr = 12; Nk = 6; break;
-            case 32: Nr = 14; Nk = 8; break;
-            default:
-                System.out.println("Erreur taille de la clée courte invalide\n");
-        }
-
-        W = new int[(4 * (Nr+1))][4];
-
-        System.out.println("K = " + K.length *4 );
-        System.out.println("Nr = " +Nr);
-        System.out.println("Nk = " + Nk);
-        System.out.println();
-
-        calcule_la_clef_etendue();
-
-        affiche_la_clef();
-
-
-    }
-
 
 }
