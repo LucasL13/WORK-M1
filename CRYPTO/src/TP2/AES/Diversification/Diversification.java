@@ -44,7 +44,7 @@ public class Diversification {
                     System.out.println();
             }
         }
-
+        System.out.println();
     }
 
     public int[] RotWord(int[] tmp){
@@ -77,6 +77,7 @@ public class Diversification {
         System.out.println("K = " + K.length *4 );
         System.out.println("Nr = " +Nr);
         System.out.println("Nk = " + Nk);
+        System.out.println("W = " + W.length*4);
         System.out.println();
 
         // Copie de W dans K

@@ -7,22 +7,44 @@ import java.util.Arrays;
  */
 public class AES {
 
+    private static boolean debug = false;
+
     public static Diversification clefs;
 
-    //static int[] State = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-//    static int[][] State = {
+//        static int[][] State = {
 //            {0x00, 0x04, 0x08, 0x0C},
 //            {0x01, 0x05, 0x09, 0x0D},
 //            {0x02, 0x06, 0x0A, 0x0E},
 //            {0x03, 0x07, 0x0B, 0x0F},
 //    };
+////
+//    static int[][] State = {
+//            {0x0E, 0x0B, 0x0D, 0x09},
+//            {0x09, 0x0E, 0x0B, 0x0D},
+//            {0x0D, 0x09, 0x0E, 0x0B},
+//            {0x0B, 0x0D, 0x09, 0x0E},
+//    };
 //
     static int[][] State = {
-            {0x0E, 0x0B, 0x0D, 0x09},
-            {0x09, 0x0E, 0x0B, 0x0D},
-            {0x0D, 0x09, 0x0E, 0x0B},
-            {0x0B, 0x0D, 0x09, 0x0E},
+            {0x00, 0x00, 0x00, 0x00},
+            {0x00, 0x00, 0x00, 0x00},
+            {0x00, 0x00, 0x00, 0x00},
+            {0x00, 0x00, 0x00, 0x00}
     };
+
+//    static int[][] State = {
+//            {0xFF, 0xFF, 0xFF, 0xFF},
+//            {0xFF, 0xFF, 0xFF, 0xFF},
+//            {0xFF, 0xFF, 0xFF, 0xFF},
+//            {0xFF, 0xFF, 0xFF, 0xFF}
+//    };
+//
+//   static int[][] State = {
+//            {0x63, 0x63, 0x63, 0x63},
+//            {0x63, 0x63, 0x63, 0x63},
+//            {0x63, 0x63, 0x63, 0x63},
+//            {0x63, 0x63, 0x63, 0x63}
+//    };
 
     static int[][] clef_K = {
             {0x00, 0x00, 0x00, 0x00},
@@ -62,7 +84,6 @@ public class AES {
         for(int i=0; i < 4; i++)
             for(int j=0; j < 4; j++)
                 State[i][j] = clefs.SBox[State[i][j]];
-
     }
 
 
@@ -83,15 +104,15 @@ public class AES {
         int[] tmp = new int[4];
 
         for(int x = 0; x < 4; x++) {
-            System.out.print("Je vais MixColumns la colonne [");
+            if(debug) System.out.print("Je vais MixColumns la colonne [");
             for (int i = 0; i < 4; i++)
                 tmp[i] = 0;
 
             for (int i = 0; i < 4; i++) {
-                System.out.format("%02X, ", State[i][x]);
+                if(debug) System.out.format("%02X, ", State[i][x]);
                 tmp[x] ^= gmul(State[i][x],Mat_Columns[x][i]);
             }
-            System.out.println("]");
+            if(debug) System.out.println("]");
             for(int i=0; i < 4; i++)
                 State[i][x] = tmp[i];
         }
@@ -102,7 +123,7 @@ public class AES {
 
     public static void afficher_state(){
         System.out.println();
-        for(int i=0; i < State.length; i++) {
+        for(int i=0; i < 4; i++) {
             for(int j=0; j < 4; j++) {
                 System.out.format("%02X | ", State[i][j]);
             }
@@ -112,6 +133,61 @@ public class AES {
         System.out.println();
     }
 
+
+    public static void afficher_cle_ronde(int r){
+        System.out.println("J'affiche clé de ronde ("+r+") : " );
+        for(int i =0; i < 4; i++){
+            for(int j=0; j<4; j++){
+                System.out.format("%02X | ", clefs.W[j + (r*4)][i]);
+            }
+            System.out.println();
+        }
+    }
+
+    public static void AddRoundKey(int r){
+        if(debug) afficher_cle_ronde(r);
+        for(int i = 0; i < 4; i++){
+            for(int j=0; j <4; j++){
+                if(debug) System.out.format("State[%d][%d] = %02X\n", i, j, State[i][j]);
+                if(debug) System.out.format("clefs.W[%d][%d] = %02X\n", (j + (r*4)), i, clefs.W[j + (r*4)][i]);
+                State[i][j] ^= clefs.W[j + (r*4)][i];
+                if(debug) System.out.format("State[%d][%d] = %02X\n\n", i, j, State[i][j]);
+            }
+        }
+    }
+
+
+    public static void AES_Encrypt(){
+        clefs = new Diversification();
+        clefs.K = clef_K;
+        clefs.calcule_la_clef_etendue();
+        clefs.affiche_la_clef();
+
+        AddRoundKey(0);
+
+        for(int r=1; r<clefs.Nr; r++){
+            SubBytes();
+            if(debug) System.out.println("After SubBytes :");
+            if(debug) afficher_state();
+
+            ShiftRows();
+            if(debug) System.out.println("After ShiftRows :");
+            if(debug) afficher_state();
+
+            MixColumns();
+            if(debug) System.out.println("After MixColums :");
+            if(debug) afficher_state();
+
+            AddRoundKey(r);
+            if(debug) System.out.println("After RoundKey :");
+            if(debug) afficher_state();
+        }
+
+        SubBytes();
+        ShiftRows();
+        AddRoundKey(clefs.Nr);
+    }
+
     public static void main(String[] args) {
 
         System.out.println("Starting main class : AES");
@@ -119,23 +195,20 @@ public class AES {
         System.out.println("Longueur du bloc 'State' : \n"+ State.length);
         System.out.println("Longueur de la clée courte : \n"+ clef_K.length * 4);
 
-        afficher_state();
-
-        //SubBytes();
-        //afficher_state();
-
-        //ShiftRows();
-        //afficher_state();
-
-        MixColumns();
-        afficher_state();
 
         clefs = new Diversification();
         clefs.K = clef_K;
-
         clefs.calcule_la_clef_etendue();
+        clefs.affiche_la_clef();
+        afficher_state();
 
-        //clefs.affiche_la_clef();
+//        MixColumns();
+//        AddRoundKey(1);
+
+        System.out.println("\nAES_Encrypt() ->\n");
+        AES_Encrypt();
+
+        afficher_state();
 
     }
 
