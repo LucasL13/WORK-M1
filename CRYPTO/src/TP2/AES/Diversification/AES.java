@@ -100,25 +100,27 @@ public class AES {
     }
 
 
+
     public static void MixColumns(){
-        int[] tmp = new int[4];
 
-        for(int x = 0; x < 4; x++) {
-            if(debug) System.out.print("Je vais MixColumns la colonne [");
-            for (int i = 0; i < 4; i++)
-                tmp[i] = 0;
+        for(int colonne = 0; colonne < 4; colonne++){
+            // state [][colonne]
+            int[] tmp = new int[4];
 
-            for (int i = 0; i < 4; i++) {
-                if(debug) System.out.format("%02X, ", State[i][x]);
-                tmp[x] ^= gmul(State[i][x],Mat_Columns[x][i]);
+            for(int x=0; x<4; x++) {
+                tmp[x] = gmul(State[0][colonne], Mat_Columns[x][0]);
             }
-            if(debug) System.out.println("]");
-            for(int i=0; i < 4; i++)
-                State[i][x] = tmp[i];
+
+            for(int i=0; i<4; i++){
+                for(int j=1; j<4; j++){
+                    tmp[i] ^= gmul(State[j][colonne], Mat_Columns[i][j]);
+                }
+            }
+
+            for(int x=0; x<4; x++)
+                State[x][colonne] = tmp[x];
         }
-
     }
-
 
 
     public static void afficher_state(){
