@@ -87,6 +87,23 @@ public class AES {
     }
 
 
+    public static void Inv_SubBytes(){
+        for(int i=0; i <4; i++){
+            for(int j=0; j<4; j++){
+                int trouve = 0;
+                while(trouve != -1){
+                    if(clefs.SBox[trouve] == State[i][j]){
+                        State[i][j] = trouve;
+                        trouve = -1;
+                    }
+                    else
+                        trouve++;
+                }
+            }
+        }
+    }
+
+
     public static void ShiftRows(){
 
         int[] tmp = new int[4];
@@ -197,15 +214,7 @@ public class AES {
         System.out.println("Longueur du bloc 'State' : \n"+ State.length);
         System.out.println("Longueur de la clée courte : \n"+ clef_K.length * 4);
 
-
-        clefs = new Diversification();
-        clefs.K = clef_K;
-        clefs.calcule_la_clef_etendue();
-        clefs.affiche_la_clef();
         afficher_state();
-
-//        MixColumns();
-//        AddRoundKey(1);
 
         System.out.println("\nAES_Encrypt() ->\n");
         AES_Encrypt();
