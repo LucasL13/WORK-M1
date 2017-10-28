@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VueProfile</class>
+ <widget class="QWidget" name="VueProfile">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1280</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1280</width>
+    <height>800</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1281</width>
+     <height>801</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <italic>false</italic>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>graphics_pacman/Source_bg.jpg</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>80</y>
+     <width>1181</width>
+     <height>641</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: white; border-radius: 15px;</string>
+   </property>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>70</y>
+      <width>291</width>
+      <height>271</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="nom">
+       <property name="text">
+        <string>Nom : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="score">
+       <property name="text">
+        <string>Score : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="niv_max">
+       <property name="text">
+        <string>Niv max : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="classement">
+       <property name="text">
+        <string>Classement : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="fantome">
+       <property name="text">
+        <string>Nombre de fantôme abatus : </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="gomme">
+       <property name="text">
+        <string>Nombre de gommes avalées : </string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>380</y>
+      <width>300</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>300</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>URW Gothic L</family>
+      <pointsize>13</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="statusTip">
+     <string/>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color : rgb(237, 212, 0);
+color: black;
+border: 3px solid gray;
+border-radius: 15px;</string>
+    </property>
+    <property name="text">
+     <string>CHOISIR UN AUTRE PROFIL</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>470</y>
+      <width>300</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>300</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>URW Gothic L</family>
+      <pointsize>13</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
+     </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: black; 
+color: white; 
+border: 3px solid gray;</string>
+    </property>
+    <property name="text">
+     <string>JOUER A CE NIVEAU</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>40</y>
+      <width>441</width>
+      <height>521</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid black; border-radius: 10px;</string>
+    </property>
+    <property name="title">
+     <string>Choisir le niveau de jeu</string>
+    </property>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>439</width>
+       <height>479</height>
+      </rect>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>437</width>
+        <height>477</height>
+       </rect>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>140</x>
+         <y>240</y>
+         <width>251</width>
+         <height>211</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2"/>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>VueProfile</receiver>
+   <slot>changeProfil()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>329</x>
+     <y>490</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>639</x>
+     <y>399</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>changeProfil()</slot>
+ </slots>
+</ui>
