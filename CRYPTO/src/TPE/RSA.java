@@ -5,6 +5,7 @@ import com.sun.org.apache.xpath.internal.SourceTree;
 import javax.sound.midi.Soundbank;
 import java.math.BigInteger;
 import java.util.Random;
+import java.util.StringJoiner;
 
 public class RSA {
     private static int LG_MAX = 10;
@@ -23,7 +24,8 @@ public class RSA {
 
         fnp = new FabriqueNP();
 
-        message = "Alfred";                     // C'est le message ASCII à chiffrer
+        message = "SalutCecIesTuNMEssageCOde";                     // C'est le message ASCII à chiffrer
+        System.out.println("Mess length = " + message.length());
         os2ip(); // <----------------------------------------------------- Exercice 2
         System.out.println("Message de " + message.length() + " caractères codé par "
                            + code);
@@ -64,10 +66,9 @@ public class RSA {
 
         do{
             d = new BigInteger(1024, new Random());
-        }while( (d.compareTo(w) != -1) &&
+        }while( (d.compareTo(w) != -1) ||
                 (!(d.gcd(w)).equals(BigInteger.ONE)));
 
-        //e = (w.modInverse(new BigInteger("1"))).divide(d);
         e = d.modInverse(w);
     }
     
@@ -77,14 +78,31 @@ public class RSA {
         byte X[] = message.getBytes();
 
         for(int i=0; i < X.length; i++){
-            long a = ((int) X[X.length - 1 - i]) * (long) Math.pow(256, i);
-            x = x.add(new BigInteger(String.valueOf(a)));
+            x = x.add(new BigInteger(String.valueOf(X[X.length - 1 - i])).multiply(new BigInteger("256").pow(i)));
         }
         code = x;
     }
     
     static void i2osp() {
-        messageDechiffré = "Alfred";
+
+        int l = 0;
+        BigInteger b = BigInteger.ZERO;
+
+        do{
+            l++;
+            b = new BigInteger("256").pow(l);
+        }while( b.compareTo(code_dechiffre) != 1);
+
+        System.out.println("l = " + l);
+
+        byte text[] = new byte[l];
+
+        for(int i=(l-1); i >= 0; i--){
+            BigInteger t = code_dechiffre.divide(new BigInteger("256").pow(i));
+            t = t.mod(new BigInteger("256"));
+            text[ (l-1) - i] = t.byteValueExact();
+        }
+        messageDechiffré = new String(text);
     }  
 }
 
