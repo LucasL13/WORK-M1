@@ -85,15 +85,15 @@ public class EPP
         BigInteger b;
         long temps_recherche = System.currentTimeMillis();
 
-        for(int i=0; i < 100; i++){
+        for(int i=0; i < 100000; i++){
             if(est_probablement_premier(fabriquerGrandNombre(1024))) {
-                System.out.println("trouvé");
+                //System.out.println("trouvé");
                 nb_nbP++;
             }
         }
 
         temps_recherche = System.currentTimeMillis() - temps_recherche;
-        System.out.println("Proportion de nb premiers de 1024bits : " + nb_nbP + "/100\nTrouvé en " + temps_recherche + "ms");
+        System.out.println("Proportion de nb premiers de 1024bits : " + nb_nbP + "/100000\nTrouvé en " + temps_recherche + "ms");
     }
 
     public static void main(String[] args)
