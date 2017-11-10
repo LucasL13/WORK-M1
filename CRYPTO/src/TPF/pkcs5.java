@@ -7,14 +7,14 @@ import java.io.*;
  */
 public class pkcs5 {
 
-    static File source;
-    static String sourceName;
-    static FileInputStream fis;
-    static FileOutputStream fos;
+    File source;
+    String sourceName;
+    FileInputStream fis;
+    FileOutputStream fos;
+    String sourcePadded = "pkcs5-" + sourceName;
 
-    public static void add_padding(int paddToAdd) throws IOException{
+    public void add_padding(int paddToAdd) throws IOException{
 
-        String sourcePadded = "pkcs5-" + sourceName;
 
         fis = new FileInputStream(source);
         fos = new FileOutputStream(new File(sourcePadded));
@@ -36,11 +36,10 @@ public class pkcs5 {
 
         File copy = new File(sourcePadded);
         System.out.println("Taille du nouveau fichier   : " + copy.length() + " ( = " + (copy.length() % 16) + "%16 )");
-
     }
 
-    public static void ouvrir_fichier() throws IOException{
-        source = new File(sourceName    );
+    public void ouvrir_fichier() throws IOException{
+        source = new File(sourceName);
 
         System.out.println("Taille du fichier d'origine : " + source.length() + " ( = " + (source.length() % 16) + "%16 )");
 
@@ -50,15 +49,5 @@ public class pkcs5 {
             add_padding(length_modulo);
     }
 
-    public static void main(String[] args) {
-
-        sourceName = "butokuden.jpg";
-
-        try {
-            ouvrir_fichier();
-        }
-        catch (IOException e) { e.printStackTrace(); }
-
-    }
 
 }

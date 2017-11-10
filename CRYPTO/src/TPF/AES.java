@@ -1,5 +1,11 @@
 package TPF;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Array;
+
 /**
  * Created by work on 06/10/17.
  */
@@ -7,42 +13,24 @@ public class AES {
 
     private static boolean debug = false;
 
+    private static String cryptedName = "cbc-secret.jpg";
+
+    private static File in_file;
+    private static File out_file;
+
+    private static FileInputStream fis;
+    private static FileOutputStream fos;
+
+    private static int lecture_bloc = 0;
+
     public static Diversification clefs;
 
-//        static int[][] State = {
-//            {0x00, 0x04, 0x08, 0x0C},
-//            {0x01, 0x05, 0x09, 0x0D},
-//            {0x02, 0x06, 0x0A, 0x0E},
-//            {0x03, 0x07, 0x0B, 0x0F},
-//    };
-////
-//    static int[][] State = {
-//            {0x0E, 0x0B, 0x0D, 0x09},
-//            {0x09, 0x0E, 0x0B, 0x0D},
-//            {0x0D, 0x09, 0x0E, 0x0B},
-//            {0x0B, 0x0D, 0x09, 0x0E},
-//    };
-//
     static int[][] State = {
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00}
     };
-
-//    static int[][] State = {
-//            {0xFF, 0xFF, 0xFF, 0xFF},
-//            {0xFF, 0xFF, 0xFF, 0xFF},
-//            {0xFF, 0xFF, 0xFF, 0xFF},
-//            {0xFF, 0xFF, 0xFF, 0xFF}
-//    };
-//
-//   static int[][] State = {
-//            {0x63, 0x63, 0x63, 0x63},
-//            {0x63, 0x63, 0x63, 0x63},
-//            {0x63, 0x63, 0x63, 0x63},
-//            {0x63, 0x63, 0x63, 0x63}
-//    };
 
     static int[][] clef_K = {
             {0x00, 0x00, 0x00, 0x00},
@@ -57,6 +45,13 @@ public class AES {
             {0x01, 0x02, 0x03, 0x01},
             {0x01, 0x01, 0x02, 0x03},
             {0x03, 0x01, 0x01, 0x02}
+    };
+
+    static int[][] init_vector = {
+            {0x00, 0x00, 0x00, 0x00},
+            {0x00, 0x00, 0x00, 0x00},
+            {0x00, 0x00, 0x00, 0x00},
+            {0x00, 0x00, 0x00, 0x00}
     };
 
 
@@ -75,7 +70,6 @@ public class AES {
         }
         return p & 0xFF;
     }
-
 
 
     public static void SubBytes(){
@@ -113,7 +107,6 @@ public class AES {
                 State[i][j] = tmp[j];
         }
     }
-
 
 
     public static void MixColumns(){
@@ -161,6 +154,7 @@ public class AES {
         }
     }
 
+
     public static void AddRoundKey(int r){
         if(debug) afficher_cle_ronde(r);
         for(int i = 0; i < 4; i++){
@@ -205,20 +199,84 @@ public class AES {
         AddRoundKey(clefs.Nr);
     }
 
+    public static void lire_bloc(){
+        try {
+
+//            byte b[] = new byte[16];
+//            fis.read(b);
+
+            //System.out.println(b[1]);
+
+            for (int i = 0; i < 4; i++){
+                for (int j = 0; j < 4; j++) {
+                    if(lecture_bloc == 0)
+                        State[i][j] = fis.read() ^ init_vector[i][j];
+                    else
+                        State[i][j] = fis.read() ^ State[i][j];
+                }
+            }
+            lecture_bloc += 16;
+
+        }
+        catch (Exception e){ e.printStackTrace(); }
+    }
+
+    public static void ecrire_bloc(){
+        try{
+            for(int i=0; i < 4; i++)
+                for(int j=0; j < 4; j++)
+                    fos.write(State[i][j]);
+        }
+        catch (Exception e){ e.printStackTrace(); }
+    }
+
     public static void main(String[] args) {
 
         System.out.println("Starting main class : AES");
 
-        System.out.println("Longueur du bloc 'State' : \n"+ State.length);
-        System.out.println("Longueur de la clée courte : \n"+ clef_K.length * 4);
+        pkcs5 pk = new pkcs5();
+        try {
+            pk.sourceName = "butokuden.jpg";
+            pk.ouvrir_fichier();
 
-        afficher_state();
+            in_file = new File(pk.sourcePadded);
+            out_file = new File(cryptedName);
 
-        System.out.println("\nAES_Encrypt() ->\n");
-        AES_Encrypt();
+            fis = new FileInputStream(in_file);
+            fos = new FileOutputStream(out_file);
 
-        afficher_state();
+            for(int i=0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    init_vector[i][j] = (int) (Math.random() * 255);
+                    fos.write(init_vector[i][j]);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+
+
+        while(lecture_bloc < in_file.length()){
+            lire_bloc();
+            AES_Encrypt();
+            ecrire_bloc();
+        }
+
+//        System.out.println("Longueur du bloc 'State' : \n"+ State.length);
+//        System.out.println("Longueur de la clée courte : \n"+ clef_K.length * 4);
+//        afficher_state();
+//        System.out.println("\nAES_Encrypt() ->\n");
+//        AES_Encrypt();
+//        afficher_state();
+
+        System.out.println("Taille fichier source (" + pk.sourcePadded + ") = " + in_file.length());
+        System.out.println("Taille fichier destination (" + cryptedName + ") = " + out_file.length());
+
+        try {
+            fis.close();
+            fos.close();
+        }catch (Exception e){ e.printStackTrace(); }
     }
 
 }
