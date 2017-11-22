@@ -25,17 +25,14 @@ data ExprType = Add ExprType ExprType |
                 Term ExprType | 
                 Unit ExprType |
                 Negative ExprType |
-                Number Int deriving Show
+                Number Double deriving Show
 
 eval (Add a b) = eval a + eval b
 eval (Minus a b) = eval a - eval b
 eval (Term a) = eval a
 eval (Number a) = a
 eval (Unit a) = eval a
-eval (Mult a b) = (eval a) * (eval b)
-eval (Div a b ) = (eval a) * (eval b)
 eval (Negative a) = -1 * (eval a)
-
 
 mangeEspaceFonc :: Parser String
 mangeEspaceFonc = 
@@ -46,6 +43,9 @@ mangeEspaceFonc =
 mangeEspace str = head (rights ((parse mangeEspaceFonc "" str):[])) 
 
 test str =  eval (head (rights ((parse expr "" str):[])))
+
+
+
 
 expr :: Parser ExprType
 expr =
@@ -106,14 +106,42 @@ unit =
             char '-'
             x <- digit
             y <- many digit
-            return  (Negative (Number (read (x:y)::Int)))
+            char '.'
+            x2 <- digit
+            y2 <- many digit
+            return  (Negative (Number (read ((x:y)++"."++(x2:y2))::Double)))
+    )
+    <|>
+    try(
+        do
+            x <- digit
+            y <- many digit
+            char '.'
+            x2 <- digit
+            y2 <- many digit
+            return (Number (read ((x:y)++"."++(x2:y2))::Double))
+    )
+    <|>
+    try(
+        do
+            char '-'
+            x <- digit
+            y <- many digit
+            return  (Negative (Number (read (x:y)::Double)))
+    )
+    <|>
+    try(
+        do
+            x <- digit
+            y <- many digit
+            return (Number (read (x:y)::Double))
     )
     <|>
     try(
         do
             x <- digit
             y <- many digit 
-            return  (Number (read (x:y)::Int))
+            return  (Number (read (x:y)::Double))
     )
     <|>
     try(

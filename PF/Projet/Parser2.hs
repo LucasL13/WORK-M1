@@ -3,15 +3,13 @@ import Text.Parsec.String (Parser)
 import Data.Either
 
 
--- data String2 = Chaine [Char] deriving Show
-
--- exp = term - exp | term + exp | term
--- term = unit * term | unit / term | unit
--- unit = - int | int | - exp | ( exp )
+-- exp = term + exp | term - exp | term
+-- term = positive * exp | positive / exp | negative * exp | negative / exp | positive | negative
+-- positive = int | (exp)
+-- negative = - int | - (exp)
 
 
 -- data Exp = Add Exp Exp | Mult Exp Exp | Constante Double
-
 -- eval (Add a b) = a+b
 -- eval (Mult a b) = a*b
 
@@ -32,10 +30,7 @@ eval (Minus a b) = eval a - eval b
 eval (Term a) = eval a
 eval (Number a) = a
 eval (Unit a) = eval a
-eval (Mult a b) = (eval a) * (eval b)
-eval (Div a b ) = (eval a) * (eval b)
 eval (Negative a) = -1 * (eval a)
-
 
 mangeEspaceFonc :: Parser String
 mangeEspaceFonc = 
@@ -47,14 +42,21 @@ mangeEspace str = head (rights ((parse mangeEspaceFonc "" str):[]))
 
 test str =  eval (head (rights ((parse expr "" str):[])))
 
+
 expr :: Parser ExprType
-expr =
-    try( 
-    do
-        a <- term 
-        char '+'
-        b <- expr
-        return (Add a b)
+expr = 
+    try(
+        do
+            a <- term
+            return a
+    )
+    <|>
+    try(
+        do
+            a <- term
+            char '+'
+            b <- expr
+            return (Add a b)
     )
     <|>
     try(
@@ -64,65 +66,57 @@ expr =
             b <- expr
             return (Minus a b)
     )
-    <|>
-    try(
-        do
-            a <- term
-            return (Term a)
-    )
-    
-
+   
 
 term :: Parser ExprType
-term = 
+term =
     try(
-    do
-       a <- unit
-       char '*'
-       b <- term
-       return (Mult a b)
+        do
+            a <- positive
+            return a
     )
     <|>
     try(
         do
-            a <- unit
+            a <- negative
+            return a
+    )
+    <|>
+    try(
+        do
+            a <- negative
+            char '*'
+            b <- expr
+            return (Mult a b)
+    )
+    <|>
+    try(
+        do
+            a <- negative
             char '/'
-            b <- term
+            b <- expr
             return (Div a b)
     )
     <|>
     try(
         do
-            a <- unit
-            return (Unit a)
-    )
-
-
-
-unit :: Parser ExprType
-unit = 
-    try(
-        do
-            char '-'
-            x <- digit
-            y <- many digit
-            return  (Negative (Number (read (x:y)::Int)))
+            a <- positive
+            char '*'
+            b <- expr
+            return (Mult a b)
     )
     <|>
     try(
         do
-            x <- digit
-            y <- many digit 
-            return  (Number (read (x:y)::Int))
+            a <- positive
+            char '/'
+            b <- expr
+            return (Div a b)
     )
-    <|>
-    try(
-    do
-        char '-'
-        a <- expr
-        return  (Negative a)
-    )
-    <|>
+    
+
+positive :: Parser ExprType
+positive = 
     try(
         do
             char '('
@@ -130,11 +124,34 @@ unit =
             char ')'
             return a
     )
-    
-fromDigits = foldl addDigit 0
-    where addDigit num d = 10*num + d
+    <|>
+    try(
+        do
+            u <- digit
+            a <- many digit
+            return (Number (read (u:a)::Int))
+    )
+   
 
 
+negative :: Parser ExprType
+negative = 
+    try(
+        do
+            char '-'
+            char '('
+            a <- expr
+            char ')'
+            return (Negative a)
+    )
+    <|>
+    try(
+        do
+            char '-'
+            u <- digit
+            a <- many digit
+            return (Negative (Number (read (u:a)::Int)))
+    )
 
 
 -- test str = head (rights ((parse tarace "" (mangeEspace str)):[])) 
