@@ -38,7 +38,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReseauxToolbox.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ReseauxToolbox.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/TCPv1/ReseauxToolbox.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="349">
@@ -50,11 +50,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TCPv1/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
+            <state relative-caret-position="576">
+              <caret line="32" column="20" lean-forward="true" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -80,6 +80,7 @@
         <option value="$PROJECT_DIR$/src/Mots.txt" />
         <option value="$PROJECT_DIR$/src/TCPv1/Serveur.java" />
         <option value="$PROJECT_DIR$/src/TCPv1/ReseauxToolbox.java" />
+        <option value="$PROJECT_DIR$/src/TCPv1/Client.java" />
       </list>
     </option>
   </component>
@@ -617,12 +618,12 @@
       <option name="presentableId" value="Default" />
       <updated>1511450553919</updated>
       <workItem from="1511450557000" duration="2122000" />
-      <workItem from="1511472488582" duration="5185000" />
+      <workItem from="1511472488582" duration="6072000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7307000" />
+    <option name="totallyTimeSpent" value="8194000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="0" width="1928" height="1056" extended-state="6" />
@@ -694,14 +695,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/UDPv1.java" />
-    <entry file="file://$PROJECT_DIR$/src/TCPv1/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="19" lean-forward="false" selection-start-line="5" selection-start-column="19" selection-end-line="5" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Mots.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -727,6 +720,14 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/TCPv1/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="32" column="20" lean-forward="true" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>
