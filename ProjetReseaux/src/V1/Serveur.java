@@ -85,7 +85,7 @@ public class Serveur extends ReseauxToolbox {
             mot_en_cours += "_";
 
         sendMessage(client, "Le mot a trouver : " + mot_en_cours + " en " + nb_tentatives + " tentatives ! Bonne chance\n\n");
-        sendMessage(client, "Entrez une lettre : ");
+        sendMessage(client, SEND_A_LETTER);
 
         // Tant que le mot n'as pas été trouvé et qu'il reste des tentatives
         while(nb_tentatives > 0 && !jeu_trouve){
@@ -112,17 +112,20 @@ public class Serveur extends ReseauxToolbox {
 
             nb_coups++;
 
-            if(nb_tentatives > 0)
-                sendLetters(client, mot_en_cours, motActif.indexOf(a) != -1, nb_tentatives);
-
             if(mot_en_cours.equals(motActif))
                 jeu_trouve = true;
+
+            if(nb_tentatives > 0 || !jeu_trouve) {
+                sendLetters(client, mot_en_cours, motActif.indexOf(a) != -1, nb_tentatives);
+            }
         }
 
         if(jeu_trouve)
             sendMessage(client, "\n\nVous avez gagné en " + nb_coups + " coups ! Bravo\nAurevoir et merci d'avoir joué\n");
         else
-            sendMessage(client, "\n\nVous avez perdu ! Le mot était \""+ motActif + "\" .. Une prochaine fois peut-être !\nAurevoir et merci d'avoir joué\n");
+            sendMessage(client, "\n\nVous avez perdu ! Le mot était \""+ motActif + "\" .. Une prochaine fois peut-être !\nAurevoir et merci d'avoir joué");
+
+        sendMessage(client, END_OF_COMMUNICATION);
 
         try {
             client.close();
