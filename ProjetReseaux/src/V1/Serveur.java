@@ -1,12 +1,24 @@
-package TCPv1;
+/**
+    Nom du binôme : LOIGNON Lucas et FAUCONNIER Axel
+
+    Description de la classe : Serveur de jeu.
+
+    Fonctionnalités :
+        - Attend la connexion d'un client
+        - Lance une partie du jeu du mot caché
+        - Met en attente les nouvelles connexions si une partie est en cours
+
+    Dependances : ReseauxToolbox : une classe abstraite qui fournit des méthodes pour faciliter les communications réseaux
+
+ **/
+
+package V1;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.Socket;
 
-import static java.lang.Thread.sleep;
-
-public class Serveur extends ReseauxToolbox{
+public class Serveur extends ReseauxToolbox {
 
     private boolean estActif;           // Indicateur d'activité du serveur
     private ServerSocket ss;            // Socket du serveur
