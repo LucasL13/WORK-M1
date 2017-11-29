@@ -12,8 +12,6 @@
 
  **/
 
-package V1;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -51,7 +49,7 @@ public class Serveur extends ReseauxToolbox {
                 System.out.println("[Serveur] Connexion acceptée (client id = " + client.getInetAddress()+")");
                 jouer();
                 client.close();
-            }catch (Exception e){ e.printStackTrace(); }
+            }catch (IOException e){ e.printStackTrace();  }
 
         }
 
@@ -112,11 +110,11 @@ public class Serveur extends ReseauxToolbox {
 
             nb_coups++;
 
-            if(mot_en_cours.equals(motActif)) {
+                  if(mot_en_cours.equals(motActif)) {
                 jeu_trouve = true;
                 System.out.println("END GAME");
             }
-            else if(nb_tentatives > 0 || !jeu_trouve) {
+            else if(nb_tentatives > 0 && !jeu_trouve) {
                 sendLetters(client, mot_en_cours, motActif.indexOf(a) != -1, nb_tentatives);
             }
         }
@@ -124,7 +122,7 @@ public class Serveur extends ReseauxToolbox {
         if(jeu_trouve)
             sendMessage(client, "\n\nVous avez gagné en " + nb_coups + " coups ! Bravo\nAurevoir et merci d'avoir joué\n");
         else
-            sendMessage(client, "\n\nVous avez perdu ! Le mot était \""+ motActif + "\" .. Une prochaine fois peut-être !\nAurevoir et merci d'avoir joué");
+            sendMessage(client, "\n\nVous avez perdu ! Le mot était \""+ motActif + "\" .. Une prochaine fois peut-être !\nAurevoir et merci d'avoir joué\n");
 
         sendMessage(client, END_OF_COMMUNICATION);
 
