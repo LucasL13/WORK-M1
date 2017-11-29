@@ -1,7 +1,7 @@
 /**
     Nom du binôme : LOIGNON Lucas et FAUCONNIER Axel
 
-    Description de la classe : Serveur de jeu.
+    Description de la classe : Serveur de jeu (UDP)
 
     Fonctionnalités :
         - Attend la connexion d'un client
@@ -12,24 +12,40 @@
 
  **/
 
+package V2;
+
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
+
+import static java.lang.Thread.sleep;
 
 public class Serveur extends ReseauxToolbox {
 
+    private int port;                   // Numéro de port d'écoute du serveur
     private boolean estActif;           // Indicateur d'activité du serveur
-    private ServerSocket ss;            // Socket du serveur
-    private Socket client;              // Socket pour le client en cours de partie
+    private byte[] buffer;              // Buffer pour les communications entrantes
+    private DatagramSocket ds;          // Socket du serveur
+    private DatagramPacket in;          // Datagram pour la communication entrante
+    private DatagramPacket out;         // Datagram pour la communication sortante
+    private SocketAddress client;       // Socket pour le client en cours de partie
     private String motActif;            // Mot choisi pour la partie en cours
     private String dictPath;            // Chemin vers le fichier dictionnaire
     private boolean jeu_trouve;         // Indicateur de l'etat de la partie en cours
+    private int nb_tentatives;
 
     // Constructeur du serveur
     // Par défaut : localhost:5500
     private Serveur(){
         try {
-            this.ss = new ServerSocket(5500);
+            this.ds = new DatagramSocket(5500);
+            this.dictPath = "./Mots.txt";
+        }catch(Exception e){ e.printStackTrace(); }
+    }
+
+    private Serveur(int port){
+        try {
+            this.port = port;
+            this.ds = new DatagramSocket(this.port);
             this.dictPath = "./Mots.txt";
         }catch(Exception e){ e.printStackTrace(); }
     }
@@ -44,12 +60,16 @@ public class Serveur extends ReseauxToolbox {
             System.out.println("[Serveur] Demarrage du serveur..");
             System.out.println("[Serveur] En attention d'une connexion.");
 
-            try{
-                client = ss.accept();
-                System.out.println("[Serveur] Connexion acceptée (client id = " + client.getInetAddress()+")");
+            try {
+                buffer = new byte[1024];
+                in = new DatagramPacket(buffer, buffer.length);
+                ds.receive(in);     // Bloquant jusqu'a la connexion d'un client
+                client = in.getSocketAddress();
+                System.out.println("[Serveur] Connexion acceptée (client id = " + client.toString() + ")");
                 jouer();
-                client.close();
-            }catch (IOException e){ e.printStackTrace();  }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -59,22 +79,24 @@ public class Serveur extends ReseauxToolbox {
     // Fonction d'arret du serveur
     private void arreter(){
         this.estActif = false;
+        ds.close();
     }
 
 
     // Fonction principale pour le jeu
     private void jouer(){
 
-        sendMessage(client, "Bienvenue sur le jeu du mot caché\n\n");
-        sendMessage(client, "Rappel des regles : \n");
-        sendMessage(client, "\t* Seule une lettre est prise en compte (la première)\n");
-        sendMessage(client, "\t* Aucune différence entre les lettres miniscules et majuscules\n");
-        sendMessage(client, "\t* Une lettre invalide déjà utilisée compte pas comme une tentative\n");
-        sendMessage(client, "\t* Une lettre valide déjà utilisée ne compte pas comme une tentative\n\n");
+        sendMessage(ds, client, "Bienvenue sur le jeu du mot caché\n\n");
+        sendMessage(ds, client, "Rappel des regles : \n");
+        sendMessage(ds, client, "\t* Seule une lettre est prise en compte (la première)\n");
+        sendMessage(ds, client, "\t* Aucune différence entre les lettres miniscules et majuscules\n");
+        sendMessage(ds, client, "\t* Une lettre invalide déjà utilisée compte pas comme une tentative\n");
+        sendMessage(ds, client, "\t* Une lettre valide déjà utilisée ne compte pas comme une tentative\n\n");
+
 
         // Initialisation des variables de jeu
         motActif = pickRandomWord(dictPath);
-        int nb_tentatives = (motActif.length()/2)+2;
+        nb_tentatives = (motActif.length()/2)+2;
         int nb_coups = 0;
         jeu_trouve = false;
         String mot_en_cours = "";
@@ -82,12 +104,12 @@ public class Serveur extends ReseauxToolbox {
         for(int i = 0; i < motActif.length(); i++)
             mot_en_cours += "_";
 
-        sendMessage(client, "Le mot a trouver : " + mot_en_cours + " en " + nb_tentatives + " tentatives ! Bonne chance\n\n");
-        sendMessage(client, SEND_A_LETTER);
+        sendMessage(ds, client, "Le mot a trouver : " + mot_en_cours + " en " + nb_tentatives + " tentatives ! Bonne chance\n\n");
+        sendMessage(ds, client, SEND_A_LETTER);
 
         // Tant que le mot n'as pas été trouvé et qu'il reste des tentatives
         while(nb_tentatives > 0 && !jeu_trouve){
-            char a = Character.toUpperCase(getLetter(client));
+            char a = Character.toUpperCase(getLetter(ds, client));
             System.out.println("[Serveur - Jeu] Lettre proposée : " + a);
             if(motActif.indexOf(a) == -1){
                 System.out.println("[Serveur - Jeu] Lettre absente du mot caché");
@@ -110,41 +132,36 @@ public class Serveur extends ReseauxToolbox {
 
             nb_coups++;
 
-                  if(mot_en_cours.equals(motActif)) {
+            if(mot_en_cours.equals(motActif)) {
                 jeu_trouve = true;
                 System.out.println("END GAME");
             }
             else if(nb_tentatives > 0 && !jeu_trouve) {
-                sendLetters(client, mot_en_cours, motActif.indexOf(a) != -1, nb_tentatives);
+                sendLetters(ds, client, mot_en_cours, motActif.indexOf(a) != -1, nb_tentatives);
             }
         }
 
         if(jeu_trouve)
-            sendMessage(client, "\n\nVous avez gagné en " + nb_coups + " coups ! Bravo\nAurevoir et merci d'avoir joué\n");
+            sendMessage(ds, client, "\n\nVous avez gagné en " + nb_coups + " coups ! Bravo\nAurevoir et merci d'avoir joué\n");
         else
-            sendMessage(client, "\n\nVous avez perdu ! Le mot était \""+ motActif + "\" .. Une prochaine fois peut-être !\nAurevoir et merci d'avoir joué\n");
+            sendMessage(ds, client, "\n\nVous avez perdu ! Le mot était \""+ motActif + "\" .. Une prochaine fois peut-être !\nAurevoir et merci d'avoir joué\n");
 
-        sendMessage(client, END_OF_COMMUNICATION);
+        sendMessage(ds, client, END_OF_COMMUNICATION);
 
-        try {
-            client.close();
-        } catch (IOException e) {e.printStackTrace();}
     }
 
 
     // Fonction de fermeture de la socket du client
     // Imposée par la ReseauxToolbox pour gérer les deconnexions coté client
     @Override
-    void stopSocket(Socket soc) {
-        if (!soc.equals(client)) return;
-        try{
-            client.close();
-        }catch (Exception e){ e.printStackTrace(); }
+    void stopSocket(DatagramSocket soc) {
+            this.nb_tentatives = 0;
     }
 
     public static void main(String[] args) {
         Serveur serveur = new Serveur();
         serveur.demarrer();
+
     }
 
 
