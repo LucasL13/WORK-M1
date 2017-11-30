@@ -4,7 +4,7 @@
     Description de la classe : Boîte a outils pour les communications réseaux
 
     Fonctionnalités :
-        - Fournit des méthodes pour envoyer et recevoir des messages via une socket
+        - Fournit des méthodes pour envoyer et recevoir des messages via UDP
         - Fournit une méthode pour lire un dictionnaire et choisir un mot aléatoirement
 
     Dependances :
@@ -16,14 +16,14 @@ package V2;
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 
 public abstract class ReseauxToolbox {
 
-    protected final String END_OF_COMMUNICATION = "[PROTOCOL_ENDCOM]";
-    protected final String SEND_A_LETTER        = "[PROTOCOL_SENDLET]";
+    // On utilise des "champs" de protocole pour informer le serveur et/ou le client de cas spécifiques
+    protected final String END_OF_COMMUNICATION = "[PROTOCOL_ENDCOM]";      // L'envoyeur annonce la fin de la communication
+    protected final String SEND_A_LETTER        = "[PROTOCOL_SENDLET]";     // L'envoyeur indique qu'il attend une lettre pour le mot caché
 
     private BufferedWriter bw;          // Pour écrire dans une socket
     private BufferedReader br;          // Pour lire dans une socket
@@ -31,6 +31,7 @@ public abstract class ReseauxToolbox {
 
     // Une méthode pour faciliter la reception d'une tentative du client
     // S'assure que le caractere envoyé est une lettre autorisée ([a-zA-Z])
+    // S'assure que c'est bien le client avec lequel on joue qui répond
     // Ne renvoie que la premiere lettre si la taille de l'entrée > 1
     public char getLetter(DatagramSocket ds, SocketAddress sa){
         char letter = '\0';
@@ -40,6 +41,9 @@ public abstract class ReseauxToolbox {
                 byte[] buffer = new byte[1024];
                 DatagramPacket in = new DatagramPacket(buffer, buffer.length);
                 ds.receive(in);
+
+                if(!in.getSocketAddress().equals(sa))
+                    return '\0';
 
                 if( new String(in.getData()).indexOf(END_OF_COMMUNICATION) != -1) {
                     stopSocket(ds);

@@ -31,7 +31,7 @@ public class Serveur extends ReseauxToolbox {
     private String motActif;            // Mot choisi pour la partie en cours
     private String dictPath;            // Chemin vers le fichier dictionnaire
     private boolean jeu_trouve;         // Indicateur de l'etat de la partie en cours
-    private int nb_tentatives;
+    private int nb_tentatives;          // Indicateur du nombre de tentatives restantes
 
     // Constructeur du serveur
     // Par défaut : localhost:5500
@@ -42,6 +42,7 @@ public class Serveur extends ReseauxToolbox {
         }catch(Exception e){ e.printStackTrace(); }
     }
 
+    // Constructeur du serveur avec parametrage du port
     private Serveur(int port){
         try {
             this.port = port;
@@ -110,6 +111,9 @@ public class Serveur extends ReseauxToolbox {
         // Tant que le mot n'as pas été trouvé et qu'il reste des tentatives
         while(nb_tentatives > 0 && !jeu_trouve){
             char a = Character.toUpperCase(getLetter(ds, client));
+            if(a == '\0')
+                a = Character.toUpperCase(getLetter(ds, client));
+
             System.out.println("[Serveur - Jeu] Lettre proposée : " + a);
             if(motActif.indexOf(a) == -1){
                 System.out.println("[Serveur - Jeu] Lettre absente du mot caché");

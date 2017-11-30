@@ -14,12 +14,9 @@
 
 package V2;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.util.Scanner;
 
 import static java.lang.System.exit;
@@ -32,9 +29,9 @@ public class Client extends ReseauxToolbox {
     private DatagramSocket sock;    // Socket de communication avec le serveur de jeu
     private DatagramPacket in;      // Datagram pour la communication entrante
     private DatagramPacket out;     // Datagram pour la communication sortante
-    private byte[] buffer;
+    private byte[] buffer;          // Le buffer pour stocker le contenu de la communication entrante
     private Thread lecture;         // Un thread pour lire à chaque fois que possible dans le buffer in
-    private Thread sigint_catch;
+    private Thread sigint_catch;    // Un thread chargé d'attraper la sortie du programme client pour prevenir le serveur
 
 
     // Une fonction pour établier la connexion avec le serveur de jeu
@@ -122,22 +119,24 @@ public class Client extends ReseauxToolbox {
         exit(0);
     }
 
+    // Constructeur par défaut
     Client(){
         this.hostname = "localhost";
         this.port = 5500;
-        se_connecter();
-        //jouer();
     }
 
+
+    // Constructeur avec parametres
     Client(String add, int port){
         this.hostname = add;
         this.port = port;
-        se_connecter();
-        //jouer();
     }
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args)
+    {
         Client c = new Client();
+        c.se_connecter();
     }
 
 }
