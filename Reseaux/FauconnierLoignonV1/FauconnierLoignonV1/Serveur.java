@@ -109,7 +109,7 @@ public class Serveur extends ReseauxToolbox {
             }
 
             nb_coups++;
-
+				  //Le mot a été trouvé
                   if(mot_en_cours.equals(motActif)) {
                 jeu_trouve = true;
                 System.out.println("END GAME");

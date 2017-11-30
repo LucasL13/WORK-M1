@@ -1,7 +1,3 @@
-
-play:
-	gnome-terminal -e "make serveur" ; gnome-terminal -e "make client"
-
 serveur:
 	java Serveur
 

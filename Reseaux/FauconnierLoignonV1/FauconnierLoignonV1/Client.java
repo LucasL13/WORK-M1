@@ -25,10 +25,10 @@ public class Client extends ReseauxToolbox {
     private Socket sock;            // Socket de communication avec le serveur de jeu
     private Thread lecture;         // Un thread pour lire à chaque fois que possible dans le buffer in
 
-    private String address;
-    private int port;
+    private String address;			// Adresse du serveur
+    private int port;				// Port pour se connecter
 
-    // Une fonction pour établier la connexion avec le serveur de jeu
+    // Une fonction pour établir la connexion avec le serveur de jeu
     private void se_connecter(){
         try {
             sock = new Socket(this.address, this.port);
