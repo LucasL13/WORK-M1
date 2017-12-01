@@ -42,14 +42,15 @@ public abstract class ReseauxToolbox {
                 DatagramPacket in = new DatagramPacket(buffer, buffer.length);
                 ds.receive(in);
 
-                if(!in.getSocketAddress().equals(sa))
-                    return '\0';
+//                if(!in.getSocketAddress().equals(sa))
+//                    return '\0';
 
                 if( new String(in.getData()).indexOf(END_OF_COMMUNICATION) != -1) {
                     stopSocket(ds);
                     valide = true;
                 }
                 letter = new String(in.getData()).charAt(0);
+                System.out.println("LETTRE LUE = " + letter);
                 if (!(letter >= 'A' && letter <= 'Z' || letter >= 'a' && letter <= 'z')) {
                     sendMessage(ds, sa, "\nErreur entrée : votre caractere doit être une lettre de l'alphabet\n");
 			        sendMessage(ds, sa, SEND_A_LETTER);

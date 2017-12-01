@@ -55,7 +55,7 @@ public class Client extends ReseauxToolbox {
             in = new DatagramPacket(buffer, buffer.length);
             out = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(hostname), port);
 
-            sock.send(out);     // initialisation de la connexion
+            sock.send(out);     // initialisation de lda connexion
             connecte = true;
             jouer();
         }catch(Exception e){e.printStackTrace();}
