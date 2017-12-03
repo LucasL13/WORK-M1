@@ -7,21 +7,21 @@ public class AES_functions {
 
     public Diversification clefs;
 
-//         int[][] State = {
+    //         int[][] State = {
 //            {0x00, 0x04, 0x08, 0x0C},
 //            {0x01, 0x05, 0x09, 0x0D},
 //            {0x02, 0x06, 0x0A, 0x0E},
 //            {0x03, 0x07, 0x0B, 0x0F},
 //    };
 ////
-//     int[][] State = {
-//            {0x0E, 0x0B, 0x0D, 0x09},
-//            {0x09, 0x0E, 0x0B, 0x0D},
-//            {0x0D, 0x09, 0x0E, 0x0B},
-//            {0x0B, 0x0D, 0x09, 0x0E},
-//    };
-//
-     int[][] State = {
+    int[][] MatInverse = {
+            {0x0E, 0x0B, 0x0D, 0x09},
+            {0x09, 0x0E, 0x0B, 0x0D},
+            {0x0D, 0x09, 0x0E, 0x0B},
+            {0x0B, 0x0D, 0x09, 0x0E},
+    };
+    //
+    int[][] State = {
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
@@ -42,7 +42,7 @@ public class AES_functions {
 //            {0x63, 0x63, 0x63, 0x63}
 //    };
 
-     int[][] clef_K = {
+    int[][] clef_K = {
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
@@ -50,7 +50,7 @@ public class AES_functions {
     };
     // int[][] clef_K = {{0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}};
 
-     int[][] Mat_Columns = {
+    int[][] Mat_Columns = {
             {0x02, 0x03, 0x01, 0x01},
             {0x01, 0x02, 0x03, 0x01},
             {0x01, 0x01, 0x02, 0x03},
@@ -74,6 +74,7 @@ public class AES_functions {
     }
 
 
+    /** ----------------------------- **/
 
     public  void SubBytes(){
         for(int i=0; i < 4; i++)
@@ -81,8 +82,7 @@ public class AES_functions {
                 State[i][j] = clefs.SBox[State[i][j]];
     }
 
-
-    public  void Inv_SubBytes(){
+    public  void InvSubBytes(){
         for(int i=0; i <4; i++){
             for(int j=0; j<4; j++){
                 int trouve = 0;
@@ -98,6 +98,15 @@ public class AES_functions {
         }
     }
 
+    public void test(){
+        afficher_state();
+        ShiftRows();
+        afficher_state();
+        InvShiftRows();
+        afficher_state();
+    }
+
+    /** ----------------------------- **/
 
     public  void ShiftRows(){
 
@@ -111,21 +120,52 @@ public class AES_functions {
         }
     }
 
+    public void InvShiftRows(){
+        int[] tmp = new int[4];
+        for(int i=0; i < 4; i++){
+            for(int j=0; j < 4; j++)
+                tmp[j] = State[i][(j + (4-i)) % 4];
+
+            for(int j=0; j < 4; j++)
+                State[i][j] = tmp[j];
+        }
+    }
+
+    /** ----------------------------- **/
+
+    public  void MixColumns(){for(int colonne = 0; colonne < 4; colonne++){
+        // state [][colonne]
+        int[] tmp = new int[4];
+
+        for(int x=0; x<4; x++) {
+            tmp[x] = gmul(State[0][colonne], Mat_Columns[x][0]);
+        }
+
+        for(int i=0; i<4; i++){
+            for(int j=1; j<4; j++){
+                tmp[i] ^= gmul(State[j][colonne], Mat_Columns[i][j]);
+            }
+        }
+
+        for(int x=0; x<4; x++)
+            State[x][colonne] = tmp[x];
+    }
 
 
-    public  void MixColumns(){
+    }
 
+    public void InvMixColumns(){
         for(int colonne = 0; colonne < 4; colonne++){
             // state [][colonne]
             int[] tmp = new int[4];
 
             for(int x=0; x<4; x++) {
-                tmp[x] = gmul(State[0][colonne], Mat_Columns[x][0]);
+                tmp[x] = gmul(State[0][colonne], MatInverse[x][0]);
             }
 
             for(int i=0; i<4; i++){
                 for(int j=1; j<4; j++){
-                    tmp[i] ^= gmul(State[j][colonne], Mat_Columns[i][j]);
+                    tmp[i] ^= gmul(State[j][colonne], MatInverse[i][j]);
                 }
             }
 
@@ -134,6 +174,29 @@ public class AES_functions {
         }
     }
 
+    /** ----------------------------- **/
+
+    public  void AddRoundKey(int r){
+        if(debug) afficher_cle_ronde(r);
+        for(int i = 0; i < 4; i++){
+            for(int j=0; j <4; j++){
+                if(debug) System.out.format("State[%d][%d] = %02X\n", i, j, State[i][j]);
+                if(debug) System.out.format("clefs.W[%d][%d] = %02X\n", (j + (r*4)), i, clefs.W[j + (r*4)][i]);
+                State[i][j] ^= clefs.W[j + (r*4)][i];
+                if(debug) System.out.format("State[%d][%d] = %02X\n\n", i, j, State[i][j]);
+            }
+        }
+    }
+
+    public void InvAddRoundKey(int r){
+        for(int i = 0; i < 4; i++){
+            for(int j=0; j <4; j++){
+                State[i][j] ^= clefs.W[j + (r*4)][i];
+            }
+        }
+    }
+
+    /** ----------------------------- **/
 
     public  void afficher_state(){
         System.out.println();
@@ -147,7 +210,6 @@ public class AES_functions {
         System.out.println();
     }
 
-
     public  void afficher_cle_ronde(int r){
         System.out.println("J'affiche clé de ronde ("+r+") : " );
         for(int i =0; i < 4; i++){
@@ -158,16 +220,27 @@ public class AES_functions {
         }
     }
 
-    public  void AddRoundKey(int r){
-        if(debug) afficher_cle_ronde(r);
-        for(int i = 0; i < 4; i++){
-            for(int j=0; j <4; j++){
-                if(debug) System.out.format("State[%d][%d] = %02X\n", i, j, State[i][j]);
-                if(debug) System.out.format("clefs.W[%d][%d] = %02X\n", (j + (r*4)), i, clefs.W[j + (r*4)][i]);
-                State[i][j] ^= clefs.W[j + (r*4)][i];
-                if(debug) System.out.format("State[%d][%d] = %02X\n\n", i, j, State[i][j]);
-            }
+    /** ----------------------------- **/
+
+
+    public void AES_Decrypt(){
+        clefs = new Diversification();
+        clefs.K = clef_K;
+        clefs.calcule_la_clef_etendue();
+        if(debug) clefs.affiche_la_clef();
+
+        InvAddRoundKey(clefs.Nr);
+        InvShiftRows();
+        InvSubBytes();
+
+        for (int r=clefs.Nr-1; r > 0; r--){
+            InvAddRoundKey(r);
+            InvMixColumns();
+            InvShiftRows();
+            InvSubBytes();
         }
+
+        InvAddRoundKey(0);
     }
 
 
