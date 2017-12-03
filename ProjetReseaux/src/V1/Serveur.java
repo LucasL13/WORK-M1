@@ -76,7 +76,7 @@ public class Serveur extends ReseauxToolbox {
 
         // Initialisation des variables de jeu
         motActif = pickRandomWord(dictPath);
-        int nb_tentatives = (motActif.length()/2)+2;
+            int nb_tentatives = (motActif.length()/2)+2;
         int nb_coups = 0;
         jeu_trouve = false;
         String mot_en_cours = "";

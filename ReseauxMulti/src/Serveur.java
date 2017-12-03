@@ -10,11 +10,11 @@ import java.util.ArrayList;
  */
 public class Serveur extends ReseauxToolbox {
 
-    private static String SERVEUR_START_TEXT                    = "[Serveur] Demarrage réussi ..";
-    private static final String SERVEUR_STOP_TEXT               = "";
-    private static final String SERVEUR_WAITINGCLIENT_TEXT      = "";
-    private static final String SERVEUR_ACCEPTCLIENT_TEXT       = "";
-    private static final String SERVEUR_REJECTCLIENT_TEXT       = "";
+    private static String SERVEUR_START_TEXT                    = "[Serveur] Demarrage réussi.";
+    private static final String SERVEUR_STOP_TEXT               = "[Serveur] Arrêt réussi. ";
+    private static final String SERVEUR_WAITINGCLIENT_TEXT      = "[Serveur] En attente d'une connexion..";
+    private static final String SERVEUR_ACCEPTCLIENT_TEXT       = "------\n[Serveur] Connexion entrante acceptée.\n------";
+    private static final String SERVEUR_REJECTCLIENT_TEXT       = "------\n[Serveur] Connexion entrante rejetée.\n------";
 
     private static int serveur_mode;
     private static final int SERVEUR_MODE_ON        = 1;
@@ -22,32 +22,29 @@ public class Serveur extends ReseauxToolbox {
     private static final int SERVEUR_MODE_PAUSE     = 3;
 
     private static ServerSocket ss;
-    private static String servAdr;
     private static int port;
 
     private static Thread ecouteConnexions;
+    private static int nbConnexions;
 
 
     private Serveur() {
-        this.servAdr = "localhost";
         this.port = 5500;
     }
 
-    private Serveur(String adr, int port){
-            this.servAdr = adr;
+    private Serveur(int port){
             this.port = port;
     }
 
     private void demarrer(){
         try {
-            ss = new ServerSocket(port, 10, InetAddress.getByName("localhost"));
+            ss = new ServerSocket(port);
             serveur_mode = SERVEUR_MODE_ON;
         }
         catch (UnknownHostException e){ e.printStackTrace(); }
         catch (IOException e){ e.printStackTrace(); }
 
         System.out.println(SERVEUR_START_TEXT);
-
         ecouterConnexions();
     }
 
@@ -66,14 +63,18 @@ public class Serveur extends ReseauxToolbox {
         ecouteConnexions = new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                    System.out.println("JE COMMENCE");
-                    Socket t = ss.accept();
-                    System.out.println("JAI RECU");
-                    Thread client = new Thread(new GameThread());
-                    client.start();
+                while (serveur_mode == SERVEUR_MODE_ON) {
+                    try {
+                        System.out.println(SERVEUR_WAITINGCLIENT_TEXT);
+                        Socket in = ss.accept();
+                        nbConnexions++;
+                        System.out.println(SERVEUR_ACCEPTCLIENT_TEXT);
+                        Thread client = new Thread(new GameThread(in, nbConnexions));
+                        client.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-                catch (IOException e){ e.printStackTrace(); }
             }
         });
 
