@@ -7,9 +7,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.security.Key;
+
+import static java.lang.System.exit;
 
 /**
  * Created by work on 02/12/17.
@@ -133,19 +136,29 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         LWF = (message.contains(LASTWORD_FAILED));
         GET = (message.contains(GET_WORD));
 
-        if(EOC)
-            stopClient();
+        if(EOC){
+            String motcache = message.substring(message.indexOf(END_OF_COMMUNICATION)+END_OF_COMMUNICATION.length(), message.length());
+            this.letters.setText(motcache);
+        }
 
         if(SAL)
             message = message.replace(SEND_A_LETTER, "");
 
         if(EGW) {
-            message = message.replace(ENDGAME_WIN, "");
-            message = "\n\nVous avez gagné en " + message + " coups ! Bravo\nAurevoir et merci d'avoir joué\n";
+            Object[] options = {"Rejouer","Quitter"};
+            int choix = JOptionPane.showOptionDialog(frame, "Vous avez gagné félicitations !", "VICTOIRE", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, "Quitter");
+            if(choix == 0)
+                rejouer();
+            else if(choix == 1)
+                stopClient();
         }
         else if(EGL){
-            message = message.replace(ENDGAME_LOSE, "");
-            message = "\n\nVous avez perdu ! Le mot était \"" + message + "\" .. Une prochaine fois peut-être !\nAurevoir et merci d'avoir joué\n";
+            Object[] options = {"Rejouer","Quitter"};
+            int choix = JOptionPane.showOptionDialog(frame, "Vous avez perdu !\nVous aurez plus de chance la prochaine fois", "DEFAITE", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, "Quitter");
+            if(choix == 0)
+                rejouer();
+            else if(choix == 1)
+                stopClient();
         }
 
         if(EWC){
@@ -174,8 +187,6 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
 //            read_letterInput();
 //        if(EWC)
 //            read_letterInput();
-        if(EOC)
-            stopClient();
     }
 
     @Override
@@ -203,7 +214,12 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
 
     @Override
     protected void stopClient() {
+        try{
+            connecte = false;
+            sock.close();
+            exit(0);
 
+        }catch (IOException e){ e.printStackTrace(); }
     }
 
     @Override
@@ -239,6 +255,12 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
             return true;
         }
         return false;
+    }
+
+    private void rejouer(){
+        se_connecter();
+        jouer();
+        sendMessage(sock, "&");
     }
 
     public static void main(String[] args) {

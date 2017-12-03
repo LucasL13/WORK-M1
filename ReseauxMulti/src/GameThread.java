@@ -11,11 +11,11 @@ public class GameThread extends ReseauxToolbox implements Runnable {
     private final String THREAD_CLIENT       = "------\n[Serveur -> Thread] Début d'une partie avec le nouveau client ";
 
     private final String THREAD_GAMERULES    = "Bienvenue sur le jeu du mot caché\n\n"
-                                                    + "Rappel des regles : \n"
-                                                    + "\t* Seule une lettre est prise en compte (la première)\n"
-                                                    + "\t* Aucune différence entre les lettres miniscules et majuscules\n"
-                                                    + "\t* Une lettre invalide déjà utilisée compte pas comme une tentative\n"
-                                                    + "\t* Une lettre valide déjà utilisée ne compte pas comme une tentative\n\n";
+            + "Rappel des regles : \n"
+            + "\t* Seule une lettre est prise en compte (la première)\n"
+            + "\t* Aucune différence entre les lettres miniscules et majuscules\n"
+            + "\t* Une lettre invalide déjà utilisée compte pas comme une tentative\n"
+            + "\t* Une lettre valide déjà utilisée ne compte pas comme une tentative\n\n";
 
 
 
@@ -59,25 +59,30 @@ public class GameThread extends ReseauxToolbox implements Runnable {
         // Tant que le mot n'as pas été trouvé et qu'il reste des tentatives
         while(nbTentatives > 0 && !motTrouve){
             char a = Character.toUpperCase(getLetter(client));
-            System.out.println("[Serveur -> Client"+threadNumber+"] Lettre proposée : " + a);
-            if(!motCache.contains(a+"")){
-                System.out.println("[Serveur -> Client"+threadNumber+"] Lettre absente du mot caché");
-                nbTentatives--;
-            }
-            else{
-                System.out.println("[Serveur -> Client"+threadNumber+"] Lettre presente dans le mot caché");
-                String motMisAJour = "";
-                // On construit le nouveau mot (composé des lettres trouvées et de tirets)
-                for(int i =0; i < motCache.length(); i++){
-                    if(motCache.charAt(i) == a)
-                        motMisAJour += a;
-                    else if(motCacheTemp.charAt(i) != '_')
-                        motMisAJour += motCacheTemp.charAt(i);
-                    else
-                        motMisAJour += '_';
+            if(a == '&')
+                System.out.println("[Serveur -> Client"+threadNumber+"] Le client a demandé a recevoir le mot caché");
+            else {
+                System.out.println("[Serveur -> Client" + threadNumber + "] Lettre proposée : " + a);
+                if(!motCache.contains(a+"")){
+                    System.out.println("[Serveur -> Client"+threadNumber+"] Lettre absente du mot caché");
+                    nbTentatives--;
                 }
-                motCacheTemp = motMisAJour;
+                else{
+                    System.out.println("[Serveur -> Client"+threadNumber+"] Lettre presente dans le mot caché");
+                    String motMisAJour = "";
+                    // On construit le nouveau mot (composé des lettres trouvées et de tirets)
+                    for(int i =0; i < motCache.length(); i++){
+                        if(motCache.charAt(i) == a)
+                            motMisAJour += a;
+                        else if(motCacheTemp.charAt(i) != '_')
+                            motMisAJour += motCacheTemp.charAt(i);
+                        else
+                            motMisAJour += '_';
+                    }
+                    motCacheTemp = motMisAJour;
+                }
             }
+
 
             coupJoues++;
 

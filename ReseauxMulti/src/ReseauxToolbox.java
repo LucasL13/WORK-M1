@@ -20,6 +20,7 @@ public abstract class ReseauxToolbox {
     protected final String GET_WORD             = "[PROTOCOL_GETWORD]";
     protected final String LASTWORD_FAILED      = "[PROTOCOL_LASTWFAILED]";
     protected final String LASTWORD_SUCCESS     = "[PROTOCOL_LASTWSUCCESS]";
+    protected final String CLIENT_GETWORD       = "&";
 
     private BufferedWriter bw;          // Pour écrire dans une socket
     private BufferedReader br;          // Pour lire dans une socket
@@ -33,7 +34,9 @@ public abstract class ReseauxToolbox {
             while (!valide) {
                 br = new BufferedReader(new InputStreamReader(cible.getInputStream()));
                 letter = (char) br.read();
-                if (!(letter >= 'A' && letter <= 'Z' || letter >= 'a' && letter <= 'z')) {
+                if(letter == '&')
+                    valide = true;
+                else if (!(letter >= 'A' && letter <= 'Z' || letter >= 'a' && letter <= 'z')) {
                     sendMessage(cible, ERROR_WRONGCHAR);
                 }
                 else
