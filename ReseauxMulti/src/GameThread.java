@@ -36,7 +36,7 @@ public class GameThread extends ReseauxToolbox implements Runnable {
 
     private void init_game(){
         motCache = pickRandomWord("Mots.txt");
-        nbTentatives = (motCache.length()/2)+2;
+        nbTentatives = motCache.length();
         coupJoues = 0;
         motTrouve = false;
         motCacheTemp = "";
@@ -60,7 +60,7 @@ public class GameThread extends ReseauxToolbox implements Runnable {
         while(nbTentatives > 0 && !motTrouve){
             char a = Character.toUpperCase(getLetter(client));
             if(a == '&')
-                System.out.println("[Serveur -> Client"+threadNumber+"] Le client a demandé a recevoir le mot caché");
+                System.out.println("[Serveur -> Client" + threadNumber + "] Le client a demandé a recevoir le mot caché");
             else {
                 System.out.println("[Serveur -> Client" + threadNumber + "] Lettre proposée : " + a);
                 if(!motCache.contains(a+"")){
@@ -99,7 +99,7 @@ public class GameThread extends ReseauxToolbox implements Runnable {
         if(motTrouve)
             sendMessage(client, ENDGAME_WIN + coupJoues);
         else
-            sendMessage(client, ENDGAME_LOSE );
+            sendMessage(client, ENDGAME_LOSE);
 
         sendMessage(client, END_OF_COMMUNICATION+motCache);
 

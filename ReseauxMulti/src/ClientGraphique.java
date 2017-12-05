@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.security.Key;
+import java.util.Arrays;
 
 import static java.lang.System.exit;
+import static java.lang.System.setOut;
 
 /**
  * Created by work on 02/12/17.
@@ -22,12 +24,46 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
     protected final String letters_text_text = "LE MOT CACHÉ : ";
 
     private Thread lecture;
+    private boolean connex;
+
+    protected JFrame        frame;
+    protected Socket        sock;
+
+    protected JLabel        letters;
+    protected JLabel        letters_text;
+
+    protected JTextField    letter_proposal;
+    protected JButton       letter_submit;
+    protected JTextField    tentatives_restantes;
+
+    protected JPanel        panel_top;
+    protected JPanel        panel_bottom;
+
+
+    private boolean initConnex(){
+        try{
+            String connex = JOptionPane.showInputDialog(this.frame, "Adresse du serveur", "127.0.0.1:5500");
+            this.serveurAddress = connex.split(":")[0];
+            this.serveurPort = Integer.parseInt(connex.split(":")[1]);
+        } catch (Exception e) {
+            return false;
+        }
+
+        System.out.print("Tentative de connexion à " + this.serveurAddress);
+        System.out.println(" sur le port " + this.serveurPort);
+
+        se_connecter();
+        if(!connex){
+            JOptionPane.showMessageDialog(this.frame, "Erreur : connexion impossible");
+            return false;
+        }
+        initUI();
+        jouer();
+
+        return true;
+    }
 
     private void initUI(){
-        this.frame = new JFrame("Le jeu du mot caché");
-        this.frame.setSize(600,400);
-        this.frame.setPreferredSize(new Dimension(600,300));
-        this.frame.setLocationRelativeTo(null);
 
         this.frame.setLayout(new BoxLayout(this.frame.getContentPane(), BoxLayout.PAGE_AXIS));
 
@@ -55,18 +91,25 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         this.letter_submit.setOpaque(true);
         this.letter_submit.addActionListener(this);
 
+        this.tentatives_restantes = new JTextField("Tentatives restantes : ");
+        this.tentatives_restantes.setBackground(new Color(70,70,70));
+        this.tentatives_restantes.setForeground(Color.white);
+        this.tentatives_restantes.setHorizontalAlignment(JTextField.CENTER);
+        this.tentatives_restantes.setFont(new Font(this.letters.getFont().getName(), Font.BOLD, 15));
+        this.tentatives_restantes.setBorder(BorderFactory.createLineBorder(Color.white, 0));
+
         this.panel_bottom.add(this.letter_proposal);
         this.panel_bottom.add(this.letter_submit);
 
         this.letters_text.setBackground(new Color(70,70,70));
-        this.letters_text.setMaximumSize(new Dimension(600,80));
+        this.letters_text.setMaximumSize(new Dimension(600,50));
         this.letters_text.setHorizontalAlignment(JLabel.CENTER);
         this.letters_text.setVerticalAlignment(JLabel.BOTTOM);
         this.letters_text.setOpaque(true);
         this.letters_text.setForeground(Color.WHITE);
 
         this.letters.setBackground(new Color(70,70,70));
-        this.letters.setMaximumSize(new Dimension(600,80));
+        this.letters.setMaximumSize(new Dimension(600,20));
         this.letters.setHorizontalAlignment(JLabel.CENTER);
         this.letters.setVerticalAlignment(JLabel.BOTTOM);
         this.letters.setOpaque(true);
@@ -76,12 +119,13 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         this.letters_text.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.letters.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        this.letters_text.setBorder(BorderFactory.createEmptyBorder( 0 /*top*/, 0, 30, 0 ));
-        this.letters.setBorder(BorderFactory.createEmptyBorder( 0 /*top*/, 0, 30, 0 ));
+        this.letters_text.setBorder(BorderFactory.createEmptyBorder( 30 , 0, 15, 0 ));
+        this.letters.setBorder(BorderFactory.createEmptyBorder( 0 , 0, 30, 0 ));
 
         this.frame.add(this.letters_text);
         this.frame.add(this.letters);
         this.frame.add(this.panel_bottom);
+        this.frame.add(this.tentatives_restantes);
 
         this.frame.pack();
         this.frame.setVisible(true);
@@ -90,43 +134,63 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
     public ClientGraphique(){
         this.serveurAddress = DEFAULT_ADDR;
         this.serveurPort = DEFAULT_PORT;
-        initUI();
+
+        this.frame = new JFrame("Le jeu du mot caché");
+        this.frame.setSize(600,400);
+        this.frame.setPreferredSize(new Dimension(600,300));
+        this.frame.setLocationRelativeTo(null);
+        this.frame.getContentPane().setBackground(new Color(70,70,70));
+        this.frame.pack();
+        this.frame.setVisible(true);
+
     }
 
     private ClientGraphique(int serveurPort){
         this.serveurAddress = DEFAULT_ADDR;
         this.serveurPort = serveurPort;
-        initUI();
+
+        this.frame = new JFrame("Le jeu du mot caché");
+        this.frame.setSize(600,400);
+        this.frame.setPreferredSize(new Dimension(600,300));
+        this.frame.setLocationRelativeTo(null);
+        this.frame.getContentPane().setBackground(new Color(70,70,70));
+        this.frame.pack();
+        this.frame.setVisible(true);
+
     }
 
     private ClientGraphique(String serveurAdr, int serveurPort){
         this.serveurAddress = serveurAdr;
         this.serveurPort = serveurPort;
-        initUI();
+
+        this.frame = new JFrame("Le jeu du mot caché");
+        this.frame.setSize(600,400);
+        this.frame.setPreferredSize(new Dimension(600,300));
+        this.frame.setLocationRelativeTo(null);
+        this.frame.getContentPane().setBackground(new Color(70,70,70));
+        this.frame.pack();
+        this.frame.setVisible(true);
+
     }
-
-    protected JFrame        frame;
-    protected Socket        sock;
-
-    protected JLabel        letters;
-    protected JLabel        letters_text;
-
-    protected JTextField    letter_proposal;
-    protected JButton       letter_submit;
-
-    protected JPanel        panel_top;
-    protected JPanel        panel_bottom;
 
     @Override
     protected void se_connecter() {
         try {
             sock = new Socket(this.serveurAddress, this.serveurPort);
             connecte = true;
-        }catch(Exception e){e.printStackTrace();}
+            connex = true;
+        }catch(Exception e){
+            connex = false;
+        }
+    }
+
+    protected void choisir_serveur(){
+        initConnex();
     }
 
     @Override
     protected void receive_message(String message) {
+
         EOC = (message.contains(END_OF_COMMUNICATION));
         SAL = (message.contains(SEND_A_LETTER));
         EGW = (message.contains(ENDGAME_WIN));
@@ -135,6 +199,12 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         LWS = (message.contains(LASTWORD_SUCCESS));
         LWF = (message.contains(LASTWORD_FAILED));
         GET = (message.contains(GET_WORD));
+
+        if(message.indexOf("tentatives ! Bonne chance") != -1){
+            int in = message.indexOf("_ en");
+            int out = message.indexOf("tentatives ! Bonne chance");
+            this.tentatives_restantes.setText("Tentatives restantes : " + message.substring(in+5, out-1));
+        }
 
         if(EOC){
             String motcache = message.substring(message.indexOf(END_OF_COMMUNICATION)+END_OF_COMMUNICATION.length(), message.length());
@@ -168,17 +238,26 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
 
         if(LWS){
             int parsing = message.indexOf(GET_WORD);
+            int parsingLWS = message.indexOf(LASTWORD_SUCCESS);
+            String firstPart = message.substring(parsingLWS+LASTWORD_SUCCESS.length(), parsing);
+            System.out.println("First part = " + firstPart);
+
             String secondPart = message.substring(parsing+GET_WORD.length(), message.length());
             this.letter_proposal.setBackground(Color.GREEN);
             this.letters.setText(secondPart);
             this.letter_proposal.setText("");
+            this.tentatives_restantes.setText("Tentatives restantes : " + firstPart);
         }
         else if(LWF){
             int parsing = message.indexOf(GET_WORD);
+            int parsingLWF = message.indexOf(LASTWORD_FAILED);
+            String firstPart = message.substring(parsingLWF+LASTWORD_FAILED.length(), parsing);
+            System.out.println("First part = " + firstPart);
             String secondPart = message.substring(parsing+GET_WORD.length(), message.length());
             this.letter_proposal.setBackground(Color.RED);
             this.letters.setText(secondPart);
             this.letter_proposal.setText("");
+            this.tentatives_restantes.setText("Tentatives restantes : " + firstPart);
         }
 
         System.out.println(message);
@@ -218,7 +297,6 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
             connecte = false;
             sock.close();
             exit(0);
-
         }catch (IOException e){ e.printStackTrace(); }
     }
 
@@ -265,7 +343,8 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
 
     public static void main(String[] args) {
         ClientGraphique c = new ClientGraphique();
-        c.se_connecter();
-        c.jouer();
+        boolean connex = c.initConnex();
+        while(!connex)
+            connex = c.initConnex();
     }
 }
