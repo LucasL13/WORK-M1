@@ -1,4 +1,18 @@
-import com.sun.org.apache.xml.internal.utils.CharKey;
+/**
+    Nom du binôme : LOIGNON Lucas et FAUCONNIER Axel
+
+    Description de la classe : Programme qui permet de lancer un client en mode graphique
+
+    Fonctionnalités :
+        -> Se connecte au serveur
+        -> Recoit et envoie des messages pour le jeu
+        -> Traite les messages reçus et affiche sur la console
+        -> Récupere les entrées du joueur sur l'entrée standard
+
+    Dependances :   Client : la classe abstraite qui définit les variables, constantes et fonctions génériques d'un client
+                    (-> ReseauxToolbox : une classe abstraite qui fournit des méthodes pour faciliter les communications réseaux)
+
+ **/
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,36 +24,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.security.Key;
-import java.util.Arrays;
 
 import static java.lang.System.exit;
-import static java.lang.System.setOut;
 
-/**
- * Created by work on 02/12/17.
- */
 public class ClientGraphique extends Client implements ActionListener, KeyListener{
 
     protected final String letters_text_text = "LE MOT CACHÉ : ";
 
-    private Thread lecture;
-    private boolean connex;
+    private Thread lecture;                         // Un thread pour scruter en continu l'entrée réseau
+    private boolean connex;                         // Un indicateur de la réussite de la connexion avec le serveur
 
-    protected JFrame        frame;
-    protected Socket        sock;
+    protected JFrame        frame;                  // La fenetre graphique principale
 
-    protected JLabel        letters;
-    protected JLabel        letters_text;
+    protected JLabel        letters;                // Le champ qui affiche le mot caché en cours
+    protected JLabel        letters_text;           // Le champ qui affiche "Le mot caché : " au dessus
 
-    protected JTextField    letter_proposal;
-    protected JButton       letter_submit;
-    protected JTextField    tentatives_restantes;
+    protected JTextField    letter_proposal;        // Le champ ou le joueur rentre sa lettre
+    protected JButton       letter_submit;          // Le boutton pour valider l'envoi
+    protected JTextField    tentatives_restantes;   // Le champ qui affiche le nombre de tentatives restantes
 
-    protected JPanel        panel_top;
-    protected JPanel        panel_bottom;
+    protected JPanel        panel_bottom;           // Une sous-fenetre pour agencer la partie du bas
 
 
+    // Une étape préliminaire pour afficher une fenêtre permettant de choisir le serveur et le port
     private boolean initConnex(){
         try{
             String connex = JOptionPane.showInputDialog(this.frame, "Adresse du serveur", "127.0.0.1:5500");
@@ -63,6 +70,8 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         return true;
     }
 
+
+    // Une fonction pour mettre en place graphiquement les éléments de la fenetre principale
     private void initUI(){
 
         this.frame.setLayout(new BoxLayout(this.frame.getContentPane(), BoxLayout.PAGE_AXIS));
@@ -131,6 +140,7 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         this.frame.setVisible(true);
     }
 
+
     public ClientGraphique(){
         this.serveurAddress = DEFAULT_ADDR;
         this.serveurPort = DEFAULT_PORT;
@@ -173,6 +183,8 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
 
     }
 
+
+    // Une fonction pour établir la connexion avec le serveur de jeu
     @Override
     protected void se_connecter() {
         try {
@@ -184,13 +196,14 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         }
     }
 
-    protected void choisir_serveur(){
-        initConnex();
-    }
-
+    // Une fonction qui analyse et traite le message reçu du serveur
+    // Affiche les informations utiles et répond au serveur si nécéssaire
     @Override
     protected void receive_message(String message) {
 
+        System.out.println(message);
+
+        // On vérifie la présence ou non de champs protocolaires dans le message
         EOC = (message.contains(END_OF_COMMUNICATION));
         SAL = (message.contains(SEND_A_LETTER));
         EGW = (message.contains(ENDGAME_WIN));
@@ -240,24 +253,25 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
             int parsing = message.indexOf(GET_WORD);
             int parsingLWS = message.indexOf(LASTWORD_SUCCESS);
             String firstPart = message.substring(parsingLWS+LASTWORD_SUCCESS.length(), parsing);
-            System.out.println("First part = " + firstPart);
-
             String secondPart = message.substring(parsing+GET_WORD.length(), message.length());
             this.letter_proposal.setBackground(Color.GREEN);
             this.letters.setText(secondPart);
             this.letter_proposal.setText("");
             this.tentatives_restantes.setText("Tentatives restantes : " + firstPart);
+
+            message = "Tentatives restantes : " + firstPart + "\nMot caché : " + secondPart;
         }
         else if(LWF){
             int parsing = message.indexOf(GET_WORD);
             int parsingLWF = message.indexOf(LASTWORD_FAILED);
             String firstPart = message.substring(parsingLWF+LASTWORD_FAILED.length(), parsing);
-            System.out.println("First part = " + firstPart);
             String secondPart = message.substring(parsing+GET_WORD.length(), message.length());
             this.letter_proposal.setBackground(Color.RED);
             this.letters.setText(secondPart);
             this.letter_proposal.setText("");
             this.tentatives_restantes.setText("Tentatives restantes : " + firstPart);
+
+            message = "Tentatives restantes : " + firstPart + "\nMot caché : " + secondPart;
         }
 
         System.out.println(message);
@@ -268,6 +282,9 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
 //            read_letterInput();
     }
 
+
+    // Une fonction à implementer selon le client pour le déroulement et l'affichage de la partie
+    // Lance un thread chargé d'écouter en continu et de faire traiter le message par "receive_message"
     @Override
     protected void jouer() {
         lecture = new Thread(new Runnable() {
@@ -291,6 +308,8 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         lecture.start();
     }
 
+
+    // Une fonction à implementer selon le client pour fermer la socket et quitter le programme
     @Override
     protected void stopClient() {
         try{
@@ -300,6 +319,7 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         }catch (IOException e){ e.printStackTrace(); }
     }
 
+    // Une fonction pour récuperer l'evenement "touche entrée" pour valider l'envoi de la lettre choisie
     @Override
     public void keyTyped(KeyEvent e) {
         if(e.getKeyChar() == KeyEvent.VK_ENTER)
@@ -307,20 +327,24 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
                 sendMessage(sock, this.letter_proposal.getText()+"");
     }
 
+    // Inutilisée (Imposée par l'interface KeyListenner)
     @Override
     public void keyPressed(KeyEvent e) {}
 
+    // Inutilisée (Imposée par l'interface KeyListenner)
     @Override
     public void keyReleased(KeyEvent e) {}
 
+    // Une fonction pour traiter le clic sur le bouton  "OK" qui doit envoyer la lettre choisie
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Lettre choisie : " + this.letter_proposal.getText());
         if(checkInput())
             sendMessage(sock, this.letter_proposal.getText()+"");
     }
 
 
+    // Une fonction pour valider le contenu du champ "lettre a envoyer"
+    // Vérifie qu'il n'y ai qu'un seul caractere et qu'il soit [a-zA-Z]
     private boolean checkInput(){
         String letter = this.letter_proposal.getText();
         if(letter.length() > 1){
@@ -335,12 +359,16 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         return false;
     }
 
+
+    // Une fonction pour relancer une partie une fois celle en cours terminée
     private void rejouer(){
         se_connecter();
         jouer();
         sendMessage(sock, "&");
     }
 
+
+    // La fonction main pour lancer le client graphique et le connecter une fois une adresse et un port de connexion valide obtenus (la connexion doit également réussir)
     public static void main(String[] args) {
         ClientGraphique c = new ClientGraphique();
         boolean connex = c.initConnex();

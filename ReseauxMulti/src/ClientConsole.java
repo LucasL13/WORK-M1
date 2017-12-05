@@ -1,3 +1,19 @@
+/**
+    Nom du binôme : LOIGNON Lucas et FAUCONNIER Axel
+
+    Description de la classe : Programme qui permet de lancer un client en mode console
+
+    Fonctionnalités :
+        -> Se connecte au serveur
+        -> Recoit et envoie des messages pour le jeu
+        -> Traite les messages reçus et affiche sur la console
+        -> Récupere les entrées du joueur sur l'entrée standard
+
+    Dependances :   Client : la classe abstraite qui définit les variables, constantes et fonctions génériques d'un client
+                    (-> ReseauxToolbox : une classe abstraite qui fournit des méthodes pour faciliter les communications réseaux)
+
+ **/
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,9 +22,6 @@ import java.util.Scanner;
 
 import static java.lang.System.exit;
 
-/**
- * Created by work on 02/12/17.
- */
 public class ClientConsole extends Client {
 
     private ClientConsole(){
@@ -26,6 +39,8 @@ public class ClientConsole extends Client {
         this.serveurPort = serveurPort;
     }
 
+
+    // Une fonction pour établir la connexion avec le serveur de jeu
     @Override
     protected void se_connecter() {
         try {
@@ -34,9 +49,12 @@ public class ClientConsole extends Client {
         }catch(Exception e){e.printStackTrace();}
     }
 
+    // Une fonction qui analyse et traite le message reçu du serveur
+    // Affiche les informations utiles et répond au serveur si nécéssaire
     @Override
     protected void receive_message(String message) {
 
+        // On vérifie la présence ou non de champs protocolaires dans le message
         EOC = (message.contains(END_OF_COMMUNICATION));
         SAL = (message.contains(SEND_A_LETTER));
         EGW = (message.contains(ENDGAME_WIN));
@@ -97,6 +115,7 @@ public class ClientConsole extends Client {
             stopClient();
     }
 
+    // Une fonction qui lit un caractère sur l'entrée standar et l'envoie au serveur
     protected void read_letterInput() {
         System.out.print("Entrez une lettre : ");
         Scanner sc = new Scanner(System.in);
@@ -106,6 +125,8 @@ public class ClientConsole extends Client {
         EWC = false;
     }
 
+
+    // Une fonction à implementer selon le client pour le déroulement et l'affichage de la partie
     @Override
     protected void jouer() {
         try {
@@ -122,6 +143,7 @@ public class ClientConsole extends Client {
         }catch (Exception e){ e.printStackTrace(); }
     }
 
+    // Une fonction à implementer selon le client pour fermer la socket et quitter le programme
     @Override
     protected void stopClient() {
         try{
@@ -131,6 +153,8 @@ public class ClientConsole extends Client {
         } catch (IOException e){ e.printStackTrace(); }
     }
 
+    // La fonction main qui crée une instance de client, le connecte au serveur et joue
+    // Pas de possibilités de renseigner un serveur et un port personnalisé pour le moment
     public static void main(String[] args) {
         ClientConsole cc = new ClientConsole();
         cc.se_connecter();

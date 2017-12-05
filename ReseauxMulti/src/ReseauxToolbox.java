@@ -1,3 +1,16 @@
+/**
+    Nom du binôme : LOIGNON Lucas et FAUCONNIER Axel
+
+    Description de la classe : Boîte a outils pour les communications réseaux
+
+    Fonctionnalités :
+        - Fournit des méthodes pour envoyer et recevoir des messages via une socket
+        - Fournit une méthode pour lire un dictionnaire et choisir un mot aléatoirement
+
+    Dependances :
+
+ **/
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Random;

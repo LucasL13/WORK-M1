@@ -19,10 +19,10 @@
       <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/V2/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-761">
+            <state relative-caret-position="720">
               <caret line="57" column="55" lean-forward="false" selection-start-line="57" selection-start-column="55" selection-end-line="57" selection-end-column="55" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="n#!!doc" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -31,21 +31,22 @@
       <file leaf-file-name="ReseauxToolbox.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/V2/ReseauxToolbox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="666">
-              <caret line="93" column="53" lean-forward="true" selection-start-line="89" selection-start-column="8" selection-end-line="93" selection-end-column="53" />
+            <state relative-caret-position="1404">
+              <caret line="93" column="53" lean-forward="false" selection-start-line="89" selection-start-column="8" selection-end-line="93" selection-end-column="53" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="n#!!doc" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ReseauxToolbox.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ReseauxToolbox.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/V1/ReseauxToolbox.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="67" column="40" lean-forward="true" selection-start-line="60" selection-start-column="0" selection-end-line="67" selection-end-column="40" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="11" selection-end-column="4" />
               <folding>
+                <element signature="n#!!doc" expanded="true" />
                 <element signature="method#readMots#0;class#ReseauxToolbox#0" expanded="false" />
               </folding>
             </state>
@@ -55,18 +56,20 @@
       <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/V1/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="12" selection-end-column="4" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AbstractGraphicClient.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="AbstractGraphicClient.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Multijoueurs/AbstractGraphicClient.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
-              <caret line="10" column="55" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <caret line="10" column="55" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -76,8 +79,10 @@
         <entry file="file://$PROJECT_DIR$/src/Multijoueurs/Client.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2088">
-              <caret line="121" column="5" lean-forward="true" selection-start-line="108" selection-start-column="4" selection-end-line="121" selection-end-column="5" />
-              <folding />
+              <caret line="121" column="5" lean-forward="false" selection-start-line="108" selection-start-column="4" selection-end-line="121" selection-end-column="5" />
+              <folding>
+                <element signature="imports" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -85,11 +90,11 @@
       <file leaf-file-name="Serveur.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/V2/Serveur.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="409">
+            <state relative-caret-position="900">
               <caret line="65" column="63" lean-forward="false" selection-start-line="65" selection-start-column="63" selection-end-line="65" selection-end-column="63" />
               <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="imports" expanded="true" />
+                <element signature="e#6153#6154#0" expanded="false" />
+                <element signature="e#6195#6196#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -98,8 +103,8 @@
       <file leaf-file-name="Serveur.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/V1/Serveur.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1453">
-              <caret line="132" column="54" lean-forward="true" selection-start-line="89" selection-start-column="6" selection-end-line="132" selection-end-column="54" />
+            <state relative-caret-position="144">
+              <caret line="8" column="76" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="8" selection-end-column="76" />
               <folding />
             </state>
           </provider>
@@ -156,8 +161,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1920" />
-    <option name="height" value="1052" />
+    <option name="x" value="-4" />
+    <option name="width" value="1928" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -201,6 +207,7 @@
     <panes>
       <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -305,7 +312,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -865,11 +871,13 @@
       <workItem from="1512048485841" duration="5565000" />
       <workItem from="1512137872991" duration="50000" />
       <workItem from="1512223702456" duration="7622000" />
+      <workItem from="1512404972731" duration="12000" />
+      <workItem from="1512480123545" duration="2166000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54604000" />
+    <option name="totallyTimeSpent" value="56782000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -881,7 +889,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1052" extended-state="0" />
+    <frame x="-4" y="0" width="1928" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -899,7 +907,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17379679" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1773163" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -970,8 +978,8 @@
         <state relative-caret-position="900">
           <caret line="65" column="63" lean-forward="false" selection-start-line="65" selection-start-column="63" selection-end-line="65" selection-end-column="63" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="imports" expanded="true" />
+            <element signature="e#6153#6154#0" expanded="false" />
+            <element signature="e#6195#6196#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -981,7 +989,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -991,7 +999,7 @@
         <state relative-caret-position="522">
           <caret line="45" column="34" lean-forward="false" selection-start-line="45" selection-start-column="34" selection-end-line="45" selection-end-column="34" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1001,8 +1009,8 @@
         <state relative-caret-position="990">
           <caret line="70" column="16" lean-forward="false" selection-start-line="70" selection-start-column="16" selection-end-line="70" selection-end-column="16" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="imports" expanded="true" />
+            <element signature="e#6153#6154#0" expanded="false" />
+            <element signature="e#6195#6196#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1019,7 +1027,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="792">
           <caret line="44" column="51" lean-forward="false" selection-start-line="44" selection-start-column="51" selection-end-line="44" selection-end-column="51" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1036,7 +1046,7 @@
         <state relative-caret-position="126">
           <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
-            <element signature="method#jouer#0;class#Client#0" expanded="false" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1053,6 +1063,7 @@
         <state relative-caret-position="1116">
           <caret line="75" column="30" lean-forward="true" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
           <folding>
+            <element signature="n#!!doc" expanded="true" />
             <element signature="method#readMots#0;class#ReseauxToolbox#0" expanded="false" />
           </folding>
         </state>
@@ -1071,7 +1082,7 @@
         <state relative-caret-position="486">
           <caret line="46" column="59" lean-forward="false" selection-start-line="45" selection-start-column="10" selection-end-line="46" selection-end-column="59" />
           <folding>
-            <element signature="method#jouer#0;class#Client#0" expanded="false" />
+            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1081,6 +1092,7 @@
         <state relative-caret-position="792">
           <caret line="67" column="40" lean-forward="true" selection-start-line="67" selection-start-column="40" selection-end-line="67" selection-end-column="40" />
           <folding>
+            <element signature="n#!!doc" expanded="true" />
             <element signature="method#readMots#0;class#ReseauxToolbox#0" expanded="false" />
           </folding>
         </state>
@@ -1114,7 +1126,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1286,74 +1300,79 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/V2/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-761">
+        <state relative-caret-position="720">
           <caret line="57" column="55" lean-forward="false" selection-start-line="57" selection-start-column="55" selection-end-line="57" selection-end-column="55" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/V2/Serveur.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="409">
+        <state relative-caret-position="900">
           <caret line="65" column="63" lean-forward="false" selection-start-line="65" selection-start-column="63" selection-end-line="65" selection-end-column="63" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="imports" expanded="true" />
+            <element signature="e#6153#6154#0" expanded="false" />
+            <element signature="e#6195#6196#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/V1/Serveur.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1453">
-          <caret line="132" column="54" lean-forward="true" selection-start-line="89" selection-start-column="6" selection-end-line="132" selection-end-column="54" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/V2/ReseauxToolbox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="93" column="53" lean-forward="true" selection-start-line="89" selection-start-column="8" selection-end-line="93" selection-end-column="53" />
+        <state relative-caret-position="1404">
+          <caret line="93" column="53" lean-forward="false" selection-start-line="89" selection-start-column="8" selection-end-line="93" selection-end-column="53" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="n#!!doc" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/V1/ReseauxToolbox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="67" column="40" lean-forward="true" selection-start-line="60" selection-start-column="0" selection-end-line="67" selection-end-column="40" />
-          <folding>
-            <element signature="method#readMots#0;class#ReseauxToolbox#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/V1/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="79" column="0" lean-forward="true" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Multijoueurs/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2088">
-          <caret line="121" column="5" lean-forward="true" selection-start-line="108" selection-start-column="4" selection-end-line="121" selection-end-column="5" />
-          <folding />
+          <caret line="121" column="5" lean-forward="false" selection-start-line="108" selection-start-column="4" selection-end-line="121" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Multijoueurs/AbstractGraphicClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
-          <caret line="10" column="55" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="10" column="55" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/V1/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="12" selection-end-column="4" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/V1/Serveur.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="76" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="8" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/V1/ReseauxToolbox.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="11" selection-end-column="4" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="method#readMots#0;class#ReseauxToolbox#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
