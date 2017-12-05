@@ -213,6 +213,13 @@ public class ClientGraphique extends Client implements ActionListener, KeyListen
         LWF = (message.contains(LASTWORD_FAILED));
         GET = (message.contains(GET_WORD));
 
+
+        if(message.contains("Bienvenue sur le jeu du mot caché")){
+            int in = message.indexOf("Bienvenue sur");
+            int out = message.indexOf("Bonne chance");
+            JOptionPane.showMessageDialog(frame, message.substring(in, out+"Bonne chance".length()), "Les regles", JOptionPane.INFORMATION_MESSAGE);
+        }
+
         if(message.indexOf("tentatives ! Bonne chance") != -1){
             int in = message.indexOf("_ en");
             int out = message.indexOf("tentatives ! Bonne chance");
