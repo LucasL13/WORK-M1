@@ -1,3 +1,16 @@
+/**
+    Nom du binôme : LOIGNON Lucas et FAUCONNIER Axel
+
+    Description de la classe : Serveur de jeu
+
+    Fonctionnalités :
+        -> Attend la connexion d'un client
+            -> Lance un thread qui gère une partie avec ledit client
+
+    Dependances : ReseauxToolbox : une classe abstraite qui fournit des méthodes pour faciliter les communications réseaux
+
+ **/
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -5,9 +18,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-/**
- * Created by work on 02/12/17.
- */
 public class Serveur extends ReseauxToolbox {
 
     private static String SERVEUR_START_TEXT                    = "[Serveur] Demarrage réussi.";
@@ -21,11 +31,11 @@ public class Serveur extends ReseauxToolbox {
     private static final int SERVEUR_MODE_OFF       = 2;
     private static final int SERVEUR_MODE_PAUSE     = 3;
 
-    private static ServerSocket ss;
-    private static int port;
+    private static ServerSocket ss;                         // La socket d'écoute du serveur
+    private static int port;                                // Le port d'écoute du serveur ; par défaut sur DEFAULT_PORT = 5500
 
-    private static Thread ecouteConnexions;
-    private static int nbConnexions;
+    private static Thread ecouteConnexions;                 // Le thread principal pour l'écoute des connexions
+    private static int nbConnexions;                        // Un simple compteur pour enregistrer le nombre de clients traités
 
 
     private Serveur() {
@@ -33,9 +43,11 @@ public class Serveur extends ReseauxToolbox {
     }
 
     private Serveur(int port){
-            this.port = port;
+        this.port = port;
     }
 
+
+    // Une fonction pour démarrer le serveur, la socket d'écoute et la fonction en charge de traiter les connexions entrantes
     private void demarrer(){
         try {
             ss = new ServerSocket(port);
@@ -48,19 +60,24 @@ public class Serveur extends ReseauxToolbox {
         ecouterConnexions();
     }
 
+    // Une fonction pour mettre en pause le serveur
     private void pause(){
         ecouteConnexions.interrupt();
         serveur_mode = SERVEUR_MODE_PAUSE;
     }
 
+    // Une fonction pour arrêter le serveur
     private void arreter(){
         ecouteConnexions.interrupt();
         serveur_mode = SERVEUR_MODE_OFF;
     }
 
-    private void ecouterConnexions(){
 
+    // La fonction qui démarre le thread d'écoute
+    private void ecouterConnexions(){
         ecouteConnexions = new Thread(new Runnable() {
+            // Le thread en charge d'ecouter la socket du serveur
+            // Et de créer un thread de jeu (GameThread) pour chaque client
             @Override
             public void run() {
                 while (serveur_mode == SERVEUR_MODE_ON) {
@@ -77,19 +94,14 @@ public class Serveur extends ReseauxToolbox {
                 }
             }
         });
-
         ecouteConnexions.start();
     }
 
 
+    // La fonction main qui crée une instance du serveur et le démarre
     public static void main(String[] args) {
-
         Serveur s = new Serveur();
         s.demarrer();
-        while(serveur_mode == SERVEUR_MODE_ON){
-
-        }
-
     }
 
 }
