@@ -7,6 +7,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import static java.lang.System.exit;
+import static java.lang.System.out;
+import static java.lang.System.setOut;
 
 /**
  * Created by work on 01/12/17.
@@ -135,11 +137,9 @@ public class AES {
 
     private static void crypter(){
         aes_func.AES_Encrypt();
-        if(DISPLAY_MESSAGES) System.out.print("Résultat: 0x");
-        if(DISPLAY_MESSAGES) displayBloc();
     }
 
-    public static void lire_bloc(){
+    public static void lire_bloc_forEncrypt(){
         try {
 
 //            byte b[] = new byte[16];
@@ -150,15 +150,29 @@ public class AES {
             for (int i = 0; i < 4; i++){
                 for (int j = 0; j < 4; j++) {
                     if(lecture_bloc == 0)
-                        aes_func.State[i][j] = fis.read() ^ init_vector[i][j];
+                        aes_func.State[j][i] = fis.read() ^ init_vector[j][i];
                     else
-                        aes_func.State[i][j] = fis.read() ^ aes_func.State[i][j];
+                        aes_func.State[j][i] = fis.read() ^ aes_func.State[j][i];
                 }
             }
             lecture_bloc += 16;
 
-            if(DISPLAY_MESSAGES) System.out.println("Lecture bloc = " + lecture_bloc);
+            if(DISPLAY_MESSAGES) System.out.println("Lecture bloc = [" + lecture_bloc + "-" + (lecture_bloc+16) + "]");
 
+        }
+        catch (Exception e){ e.printStackTrace(); }
+    }
+
+    public static void lire_bloc_forDecrypt(){
+        try{
+            for (int i = 0; i < 4; i++){
+                for (int j = 0; j < 4; j++) {
+                    aes_func.State[j][i] = fis.read();
+                }
+            }
+            lecture_bloc += 16;
+
+            if(DISPLAY_MESSAGES) System.out.println("Lecture bloc = [" + lecture_bloc + "-" + (lecture_bloc+16) + "]");
         }
         catch (Exception e){ e.printStackTrace(); }
     }
@@ -167,7 +181,7 @@ public class AES {
         try{
             for(int i=0; i < 4; i++)
                 for(int j=0; j < 4; j++)
-                    fos.write(aes_func.State[i][j]);
+                    fos.write(aes_func.State[j][i]);
         }
         catch (Exception e){ e.printStackTrace(); }
     }
@@ -191,9 +205,9 @@ public class AES {
 
             for(int i=0; i < 4; i++) {
                 for (int j = 0; j < 4; j++) {
-                    init_vector[i][j] = (int) (Math.random() * 255);
-                    fos.write(init_vector[i][j]);
-                    System.out.print(String.format("%02X", init_vector[i][j]));
+                    init_vector[j][i] = (int) (Math.random() * 255);
+                    fos.write(init_vector[j][i]);
+                    System.out.print(String.format("%02X", init_vector[j][i]));
                 }
             }
         } catch (IOException e) {
@@ -203,10 +217,9 @@ public class AES {
         System.out.println();
 
         while(lecture_bloc < in_file.length()){
-            lire_bloc();
+            lire_bloc_forEncrypt();
             if(DISPLAY_MESSAGES) aes_func.afficher_state();
             crypter();
-            //aes_func.afficher_state();
             ecrire_bloc();
         }
 
@@ -230,53 +243,95 @@ public class AES {
 
     private static void decrypter(){
         aes_func.AES_Decrypt();
-        if(DISPLAY_MESSAGES) System.out.print("Résultat: 0x");
-        if(DISPLAY_MESSAGES) displayBloc();
     }
 
     private static void decrypter_fichier(){
 
-        pkcs5 pk = new pkcs5();
-
         try {
-            pk.sourceName = pathfile_in;
-            pk.ouvrir_fichier();
-
-            in_file = new File(pk.sourcePadded);
-            out_file = new File(pathfile_outPrefix + pathfile_in);
+            System.out.println("Decryptage de : " + pathfile_in + " => " + pathfile_outPrefix +  pathfile_in);
+            in_file = new File(pathfile_in);
+            out_file = new File( pathfile_outPrefix +  pathfile_in);
 
             fis = new FileInputStream(in_file);
             fos = new FileOutputStream(out_file);
 
-            for(int i=0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    init_vector[i][j] = (int) (Math.random() * 255);
-                    fos.write(init_vector[i][j]);
+            System.out.print("Vecteur d'initialisation lu : ");
+            for(int i =0; i < 4; i++)
+                for(int j=0; j < 4; j++) {
+                    int c = fis.read();
+                    if(c == -1){
+                        System.out.println("Erreur lecture vecteur initialisation");
+                        exit(250);
+                    }
+                    init_vector[j][i] = c;
+                    System.out.print(String.format("%02X", init_vector[j][i]));
                 }
-            }
+            System.out.println();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
-        while(lecture_bloc < in_file.length()){
-            lire_bloc();
-            if(DISPLAY_MESSAGES) aes_func.afficher_state();
+        // premiere itération avec le vecteur d'initialisation
+        lire_bloc_forDecrypt();
+        int[][] blocSave = copyBloc(aes_func.State);
+        decrypter();
+        for(int i=0; i <4; i++)
+            for(int j=0; j < 4; j++)
+                aes_func.State[j][i] ^= init_vector[j][i];
+        ecrire_bloc();
+
+
+        // on rentre dans la boucle normale
+        while(lecture_bloc+16 < in_file.length()){
+            lire_bloc_forDecrypt();
+            if(DISPLAY_MESSAGES) System.out.println();
+            if(DISPLAY_MESSAGES) displayBloc();
+            int[][] blocOld = copyBloc(aes_func.State);
             decrypter();
-            //aes_func.afficher_state();
+            for(int i=0; i <4; i++)
+                for(int j=0; j < 4; j++)
+                    aes_func.State[j][i] ^= blocSave[j][i];
             ecrire_bloc();
+            blocSave = copyBloc(blocOld);
+
+            if(DISPLAY_MESSAGES) System.out.print("Decryptage => ");
+            if(DISPLAY_MESSAGES) displayBloc();
+            if(DISPLAY_MESSAGES) System.out.println();
         }
 
+        System.out.println("Decryptage réussi... \nRechere de padding eventuel en cours..");
 
-//        System.out.println("Longueur du bloc 'State' : \n"+ State.length);
-//        System.out.println("Longueur de la clée courte : \n"+ clef_K.length * 4);
-//        afficher_state();
-//        System.out.println("\nAES_Encrypt() ->\n");
-//        AES_Encrypt();
-//        afficher_state();
 
-        if(DISPLAY_MESSAGES) System.out.println("Taille fichier source (" + pk.sourcePadded + ") = " + in_file.length());
-        if(DISPLAY_MESSAGES) System.out.println("Taille fichier destination (" + pathfile_outPrefix+pathfile_in + ") = " + out_file.length());
+        try {
+            fis = new FileInputStream(out_file);
+            fis.getChannel().position(out_file.length() -1);
+            int c = fis.read();
+            int compteur = 1;
+            boolean padding = true;
+            while(compteur != c && padding){
+                fis.getChannel().position(out_file.length() - compteur);
+                int d = fis.read();
+                if(c == d)
+                    compteur++;
+                else
+                    padding = false;
+            }
+
+            if(padding){
+                System.out.println("Padding present : en cours de retrait.");
+                fis = new FileInputStream(out_file);
+                byte[] buffer = new byte[(int) out_file.length()-compteur];
+                fis.read(buffer, 0, (int) out_file.length()-compteur);
+                fis.close();
+                fos = new FileOutputStream(out_file);
+                fos.write(buffer);
+            }
+
+        } catch (IOException e){ e.printStackTrace(); }
+
+
 
         try {
             fis.close();
@@ -285,6 +340,14 @@ public class AES {
 
     }
 
+
+    private static int[][] copyBloc(int [][]bloc){
+        int[][] copy = new int[4][4];
+        for(int i = 0; i < 4; i++)
+            for(int j= 0; j < 4; j++)
+                copy[j][i] = bloc[j][i];
+        return copy;
+    }
 
     public static void main(String[] args) {
 
@@ -331,8 +394,11 @@ public class AES {
         }
 
         switch (mode){
-            case MODE_ENCRYPT:      crypter();              break;
-            case MODE_DECRYPT:      decrypter();            break;
+            case MODE_ENCRYPT:
+                                    crypter();
+                                    System.out.print("Résultat : 0x");    displayBloc();       break;
+            case MODE_DECRYPT:      decrypter();
+                                    System.out.print("Résultat : 0x");    displayBloc();       break;
             case MODE_ENCRYPT_FILE: crypter_fichier();      break;
             case MODE_DECRYPT_FILE: decrypter_fichier();    break;
         }
