@@ -19,8 +19,8 @@
       <file leaf-file-name="ClientGraphique.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ClientGraphique.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="203" column="34" lean-forward="false" selection-start-line="203" selection-start-column="34" selection-end-line="203" selection-end-column="34" />
+            <state relative-caret-position="439">
+              <caret line="219" column="146" lean-forward="false" selection-start-line="219" selection-start-column="146" selection-end-line="219" selection-end-column="146" />
               <folding>
                 <element signature="method#initConnex#0;class#ClientGraphique#0" expanded="false" />
                 <element signature="method#initUI#0;class#ClientGraphique#0" expanded="false" />
@@ -28,7 +28,7 @@
                 <element signature="method#ClientGraphique#1;class#ClientGraphique#0" expanded="false" />
                 <element signature="method#ClientGraphique#2;class#ClientGraphique#0" expanded="false" />
                 <element signature="method#se_connecter#0;class#ClientGraphique#0" expanded="false" />
-                <element signature="e#11704#11745#0" expanded="false" />
+                <element signature="e#12042#12083#0" expanded="false" />
                 <element signature="method#jouer#0;class#ClientGraphique#0" expanded="false" />
                 <element signature="method#stopClient#0;class#ClientGraphique#0" expanded="false" />
                 <element signature="method#keyTyped#0;class#ClientGraphique#0" expanded="false" />
@@ -45,7 +45,7 @@
         <entry file="file://$PROJECT_DIR$/src/ClientConsole.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="378">
-              <caret line="56" column="80" lean-forward="true" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="80" />
+              <caret line="56" column="80" lean-forward="false" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="80" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="method#ClientConsole#0;class#ClientConsole#0" expanded="false" />
@@ -64,7 +64,7 @@
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="527">
-              <caret line="43" column="27" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+              <caret line="43" column="27" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -679,12 +679,12 @@
       <workItem from="1512311354808" duration="345000" />
       <workItem from="1512404986037" duration="2467000" />
       <workItem from="1512426953514" duration="10648000" />
-      <workItem from="1512479643442" duration="6580000" />
+      <workItem from="1512479643442" duration="7724000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43114000" />
+    <option name="totallyTimeSpent" value="44258000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -710,7 +710,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24385026" sideWeight="0.9195953" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24385026" sideWeight="0.9195953" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32941177" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -853,7 +853,7 @@
             <element signature="method#ClientGraphique#1;class#ClientGraphique#0" expanded="false" />
             <element signature="method#ClientGraphique#2;class#ClientGraphique#0" expanded="false" />
             <element signature="method#se_connecter#0;class#ClientGraphique#0" expanded="false" />
-            <element signature="e#11704#11745#0" expanded="false" />
+            <element signature="e#12042#12083#0" expanded="false" />
             <element signature="method#jouer#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#stopClient#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#keyTyped#0;class#ClientGraphique#0" expanded="false" />
@@ -955,7 +955,7 @@
             <element signature="method#ClientGraphique#1;class#ClientGraphique#0" expanded="false" />
             <element signature="method#ClientGraphique#2;class#ClientGraphique#0" expanded="false" />
             <element signature="method#se_connecter#0;class#ClientGraphique#0" expanded="false" />
-            <element signature="e#11704#11745#0" expanded="false" />
+            <element signature="e#12042#12083#0" expanded="false" />
             <element signature="method#jouer#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#stopClient#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#keyTyped#0;class#ClientGraphique#0" expanded="false" />
@@ -1057,7 +1057,7 @@
             <element signature="method#ClientGraphique#1;class#ClientGraphique#0" expanded="false" />
             <element signature="method#ClientGraphique#2;class#ClientGraphique#0" expanded="false" />
             <element signature="method#se_connecter#0;class#ClientGraphique#0" expanded="false" />
-            <element signature="e#11704#11745#0" expanded="false" />
+            <element signature="e#12042#12083#0" expanded="false" />
             <element signature="method#jouer#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#stopClient#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#keyTyped#0;class#ClientGraphique#0" expanded="false" />
@@ -1159,7 +1159,7 @@
             <element signature="method#ClientGraphique#1;class#ClientGraphique#0" expanded="false" />
             <element signature="method#ClientGraphique#2;class#ClientGraphique#0" expanded="false" />
             <element signature="method#se_connecter#0;class#ClientGraphique#0" expanded="false" />
-            <element signature="e#11704#11745#0" expanded="false" />
+            <element signature="e#12042#12083#0" expanded="false" />
             <element signature="method#jouer#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#stopClient#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#keyTyped#0;class#ClientGraphique#0" expanded="false" />
@@ -1258,7 +1258,7 @@
     <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="527">
-          <caret line="43" column="27" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
+          <caret line="43" column="27" lean-forward="false" selection-start-line="43" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
@@ -1268,7 +1268,7 @@
     <entry file="file://$PROJECT_DIR$/src/ClientConsole.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
-          <caret line="56" column="80" lean-forward="true" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="80" />
+          <caret line="56" column="80" lean-forward="false" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="80" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="method#ClientConsole#0;class#ClientConsole#0" expanded="false" />
@@ -1284,8 +1284,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ClientGraphique.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="203" column="34" lean-forward="false" selection-start-line="203" selection-start-column="34" selection-end-line="203" selection-end-column="34" />
+        <state relative-caret-position="439">
+          <caret line="219" column="146" lean-forward="false" selection-start-line="219" selection-start-column="146" selection-end-line="219" selection-end-column="146" />
           <folding>
             <element signature="method#initConnex#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#initUI#0;class#ClientGraphique#0" expanded="false" />
@@ -1293,7 +1293,7 @@
             <element signature="method#ClientGraphique#1;class#ClientGraphique#0" expanded="false" />
             <element signature="method#ClientGraphique#2;class#ClientGraphique#0" expanded="false" />
             <element signature="method#se_connecter#0;class#ClientGraphique#0" expanded="false" />
-            <element signature="e#11704#11745#0" expanded="false" />
+            <element signature="e#12042#12083#0" expanded="false" />
             <element signature="method#jouer#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#stopClient#0;class#ClientGraphique#0" expanded="false" />
             <element signature="method#keyTyped#0;class#ClientGraphique#0" expanded="false" />

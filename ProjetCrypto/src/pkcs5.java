@@ -14,6 +14,8 @@ public class pkcs5 {
     FileOutputStream fos;
     String sourcePadded = "pkcs5-" + sourceName;
 
+    private boolean DISPLAY_MESSAGES = false;
+
     public void add_padding(int paddToAdd) throws IOException{
 
 
@@ -36,13 +38,13 @@ public class pkcs5 {
         fos.close();
 
         File copy = new File(sourcePadded);
-        System.out.println("Taille du nouveau fichier   : " + copy.length() + " ( = " + (copy.length() % 16) + "%16 )");
+        if(DISPLAY_MESSAGES) System.out.println("Taille du nouveau fichier   : " + copy.length() + " ( = " + (copy.length() % 16) + "%16 )");
     }
 
     public void ouvrir_fichier() throws IOException{
         source = new File(sourceName);
 
-        System.out.println("Taille du fichier d'origine : " + source.length() + " ( = " + (source.length() % 16) + "%16 )");
+        if(DISPLAY_MESSAGES)System.out.println("Taille du fichier d'origine : " + source.length() + " ( = " + (source.length() % 16) + "%16 )");
 
         int length_modulo = (int) (source.length() % 16);
 
