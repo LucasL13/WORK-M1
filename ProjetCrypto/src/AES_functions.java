@@ -1,19 +1,13 @@
-/**
- * Created by work on 06/10/17.
- */
+/** La classe contenant les fonctions utilitaires pour la mise en place du cryptage/décryptage AES codées en TP **/
+
 public class AES_functions {
 
+    // Mettre à true pour afficher les informations liées au déroulement des opérations
     private boolean debug = false;
 
     public Diversification clefs;
 
-    //         int[][] State = {
-//            {0x00, 0x04, 0x08, 0x0C},
-//            {0x01, 0x05, 0x09, 0x0D},
-//            {0x02, 0x06, 0x0A, 0x0E},
-//            {0x03, 0x07, 0x0B, 0x0F},
-//    };
-////
+
     int[][] MatInverse = {
             {0x0E, 0x0B, 0x0D, 0x09},
             {0x09, 0x0E, 0x0B, 0x0D},
@@ -28,27 +22,12 @@ public class AES_functions {
             {0x00, 0x00, 0x00, 0x00}
     };
 
-//     int[][] State = {
-//            {0xFF, 0xFF, 0xFF, 0xFF},
-//            {0xFF, 0xFF, 0xFF, 0xFF},
-//            {0xFF, 0xFF, 0xFF, 0xFF},
-//            {0xFF, 0xFF, 0xFF, 0xFF}
-//    };
-//
-//    int[][] State = {
-//            {0x63, 0x63, 0x63, 0x63},
-//            {0x63, 0x63, 0x63, 0x63},
-//            {0x63, 0x63, 0x63, 0x63},
-//            {0x63, 0x63, 0x63, 0x63}
-//    };
-
     int[][] clef_K = {
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00}
     };
-    // int[][] clef_K = {{0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}};
 
     int[][] Mat_Columns = {
             {0x02, 0x03, 0x01, 0x01},
@@ -222,7 +201,7 @@ public class AES_functions {
 
     /** ----------------------------- **/
 
-
+    // La fonction à appeler pour décrypter le bloc courant State
     public void AES_Decrypt(){
         clefs = new Diversification();
         clefs.K = clef_K;
@@ -243,7 +222,7 @@ public class AES_functions {
         InvAddRoundKey(0);
     }
 
-
+    // La fonction à appeler pour crypter le bloc courant State
     public  void AES_Encrypt(){
         clefs = new Diversification();
         clefs.K = clef_K;
@@ -274,21 +253,5 @@ public class AES_functions {
         ShiftRows();
         AddRoundKey(clefs.Nr);
     }
-
-//    public  void main(String[] args) {
-//
-//        System.out.println("Starting main class : AES_functions");
-//
-//        System.out.println("Longueur du bloc 'State' : \n"+ State.length);
-//        System.out.println("Longueur de la clée courte : \n"+ clef_K.length * 4);
-//
-//        afficher_state();
-//
-//        System.out.println("\nAES_Encrypt() ->\n");
-//        AES_Encrypt();
-//
-//        afficher_state();
-//
-//    }
 
 }

@@ -2,22 +2,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import static java.lang.System.exit;
-import static java.lang.System.out;
-import static java.lang.System.setOut;
 
-/**
- * Created by work on 01/12/17.
- */
+/** La fonction principale de notre programme **/
+/** Recoit des parametres conformement au sujet **/
+
 public class AES {
 
     private static final String ERROR_WRONG_PARAMETER = "[AES] Les paramètres d'appels du programme ne sont pas corrects.";
     private static final String ERROR_DISPLAY_USAGE = "[AES] Usage : java AES [-e|-d] [filepath] [keyphrase]";
 
+    // Mettre à true pour afficher les messages d'information / de déroulement des opérations
     private static final boolean DISPLAY_MESSAGES = false;
 
     private static AES_functions aes_func;
@@ -38,7 +36,7 @@ public class AES {
     private static FileInputStream fis;
     private static FileOutputStream fos;
 
-
+    // Valeurs par défaut du vecteur d'initialisation (remplacées par des valeurs aléatoires plus tard)
     static int[][] init_vector = {
             {0x00, 0x00, 0x00, 0x00},
             {0x00, 0x00, 0x00, 0x00},
@@ -95,6 +93,8 @@ public class AES {
     }
 
 
+    // Une fonction qui retourne le hachage de la string en entrée sous forme d'une String
+    // Cette String est prête à être utiliser dans les foncions setClefCustom/setBlocCustom
     private static String getMD5(String mdp){
         byte[] buffer = mdp.getBytes();
         byte[] resume = new byte[1024];
@@ -126,7 +126,6 @@ public class AES {
         System.out.println();
     }
 
-
     // Une fonction qui affiche la clef sous la forme d'une chaine hexadécimale de 32 caracteres
     private static void displayClef(){
         for(int i=0; i < 4; i++)
@@ -135,10 +134,17 @@ public class AES {
         System.out.println();
     }
 
+
+    // Les fonctions pour crypter/decrypter le bloc courant State (aec_func.State)
     private static void crypter(){
         aes_func.AES_Encrypt();
     }
 
+    private static void decrypter(){
+        aes_func.AES_Decrypt();
+    }
+
+    // Charge un bloc lu depuis un fichier dans le bloc courant State
     public static void lire_bloc_forEncrypt(){
         try {
 
@@ -177,6 +183,7 @@ public class AES {
         catch (Exception e){ e.printStackTrace(); }
     }
 
+    // Ecrit le bloc courant State dans le fichier
     public static void ecrire_bloc(){
         try{
             for(int i=0; i < 4; i++)
@@ -186,6 +193,10 @@ public class AES {
         catch (Exception e){ e.printStackTrace(); }
     }
 
+    // Les fonctions pour crypter/decrypter un fichier
+    // Travaille avec le bloc clef fixé au préalable (aec_func.clef_K)
+    //                le bloc State mis à jour au et a mesure par les fonctions de lecture ci-dessus
+    // NB : Les deux fonctionnalitées prennent en compte le bourrage PKCS5 et le mode opératoire CBC
     private static void crypter_fichier(){
 
         pkcs5 pk = new pkcs5();
@@ -239,10 +250,6 @@ public class AES {
             fos.close();
         }catch (Exception e){ e.printStackTrace(); }
 
-    }
-
-    private static void decrypter(){
-        aes_func.AES_Decrypt();
     }
 
     private static void decrypter_fichier(){
@@ -304,7 +311,7 @@ public class AES {
         System.out.println("Decryptage réussi... \nRechere de padding eventuel en cours..");
 
 
-        try {
+        try {       // On teste la presence ou non d'un padding
             fis = new FileInputStream(out_file);
             fis.getChannel().position(out_file.length() -1);
             int c = fis.read();
@@ -319,7 +326,7 @@ public class AES {
                     padding = false;
             }
 
-            if(padding){
+            if(padding){    // Si un padding à été mis en place, on l'enleve en copiant le fichier sans ledit padding
                 System.out.println("Padding present : en cours de retrait.");
                 fis = new FileInputStream(out_file);
                 byte[] buffer = new byte[(int) out_file.length()-compteur];
@@ -340,7 +347,7 @@ public class AES {
 
     }
 
-
+    // Une fonction utilitaire pour copier un bloc de 16 octets
     private static int[][] copyBloc(int [][]bloc){
         int[][] copy = new int[4][4];
         for(int i = 0; i < 4; i++)
@@ -349,6 +356,7 @@ public class AES {
         return copy;
     }
 
+    // La fonction principale qui traite les paramètres d'entrée pour gèrer les differents comportements du programme
     public static void main(String[] args) {
 
         //System.out.println("Nombre d'arguments : " + args.length);
@@ -395,10 +403,10 @@ public class AES {
 
         switch (mode){
             case MODE_ENCRYPT:
-                                    crypter();
-                                    System.out.print("Résultat : 0x");    displayBloc();       break;
+                crypter();
+                System.out.print("Résultat : 0x");    displayBloc();       break;
             case MODE_DECRYPT:      decrypter();
-                                    System.out.print("Résultat : 0x");    displayBloc();       break;
+                System.out.print("Résultat : 0x");    displayBloc();       break;
             case MODE_ENCRYPT_FILE: crypter_fichier();      break;
             case MODE_DECRYPT_FILE: decrypter_fichier();    break;
         }

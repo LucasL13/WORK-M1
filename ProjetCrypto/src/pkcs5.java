@@ -3,9 +3,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-/**
- * Created by work on 06/11/17.
- */
+/** Une classe pour externaliser la procédure de padding **/
+/** Prend un fichier en entrée et construit "pkcs5-filename" en sortie **/
+
 public class pkcs5 {
 
     File source;
